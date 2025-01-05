@@ -1,17 +1,117 @@
 package org.example;
 
-import org.example.WebApplication.ZpoProjektSerwerApplication;
+import org.example.models.ConnectDB;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
+import java.sql.*;
+
+
 public class Main {
+
     public static void main(String[] args) {
 
-        DatabaseUtils.ConnectToDatabase("database.db"); // Baza danych
-        DatabaseUtils.ExecuteUpdate("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, email TEXT, role TEXT)"); // Tabela użytkowników
-        DatabaseUtils.ExecuteUpdate("CREATE TABLE IF NOT EXISTS subjects (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, teacher TEXT)"); // Tabela przedmiotów
-        DatabaseUtils.ExecuteUpdate("CREATE TABLE IF NOT EXISTS grades (id INTEGER PRIMARY KEY AUTOINCREMENT, subject_id INTEGER, student_id INTEGER, grade INTEGER, date TEXT)"); // Tabela ocen
+        ConnectDB db = new ConnectDB();
 
-        ZpoProjektSerwerApplication.main(new String[]{}); // Strona internetowa dla studenta
+        Connection connection = db.getConnection();
+
+
+        if (connection != null) {
+
+            try {
+
+                Statement statement = connection.createStatement();
+
+                String createTable="CREATE TABLE IF NOT EXISTS students (id INTEGER PRIMARY KEY, name TEXT)";
+
+                // Create table if not exists
+
+//                Operation:C
+
+                statement.executeUpdate(createTable);
+
+
+                // Insert data
+
+                statement.executeUpdate("INSERT INTO students (name) VALUES (‘John’)");
+
+                statement.executeUpdate("INSERT INTO students (name) VALUES (‘Alice’)");
+
+                System.out.println("Data Inserted");
+
+
+//                Operation:R
+
+                // Display data
+
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM students");
+
+                System.out.println("ID\tName");
+
+                while (resultSet.next()) {
+
+                    int id = resultSet.getInt("id");
+
+                    String name = resultSet.getString("name");
+
+                    System.out.println(id + "\t" + name);
+
+                }
+
+
+//                Operation:U
+
+                // Update data
+
+                statement.executeUpdate("UPDATE students SET name = ‘Johnny’ WHERE id = 1");
+
+                System.out.println("Data Updated");
+
+                // Display updated data
+
+                resultSet = statement.executeQuery("SELECT * FROM students");
+
+                System.out.println("ID\tName");
+
+                while (resultSet.next()) {
+
+                    int id = resultSet.getInt("id");
+
+                    String name = resultSet.getString("name");
+
+                    System.out.println(id + "\t" + name);
+
+                }
+
+
+//                Operation:D
+
+//                 Delete data
+
+                statement.executeUpdate("DELETE FROM students WHERE id = 2");
+
+
+                // Close resources
+
+                resultSet.close();
+
+                statement.close();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+
+            } finally {
+
+                db.closeConnection();
+
+            }
+
+        } else {
+
+            System.out.println("Connection failed.");
+
+        }
+
     }
+
 }
