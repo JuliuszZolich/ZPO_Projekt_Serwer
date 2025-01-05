@@ -1,0 +1,204 @@
+.home-container {
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+ 
+.home-text1 {
+  fill: #3f3f3f;
+  color: #3f3f3f;
+  font-size: 40px;
+  font-family: "Fira Sans";
+  padding-top: var(--dl-space-space-twounits);
+  padding-bottom: var(--dl-space-space-twounits);
+  text-transform: uppercase;
+}
+ 
+.home-select1 {
+  width: 368px;
+  height: 69px;
+  margin: var(--dl-space-space-unit);
+  display: flex;
+  padding: var(--dl-space-space-halfunit);
+  box-shadow: 5px 5px 10px 5px #d4d4d4;
+  align-items: center;
+  border-radius: 20px;
+  flex-direction: row;
+  justify-content: center;
+}
+ 
+.home-select2 {
+  gap: var(--dl-space-space-unit);
+  width: 368px;
+  height: 69px;
+  margin: var(--dl-space-space-unit);
+  display: flex;
+  padding: var(--dl-space-space-halfunit);
+  align-self: center;
+  box-shadow: 5px 5px 10px 5px #d4d4d4;
+  border-radius: 20px;
+  justify-content: flex-start;
+}
+ 
+.home-ul {
+  width: 368px;
+  height: 329px;
+  margin: var(--dl-space-space-unit);
+  display: flex;
+  padding: var(--dl-space-space-halfunit);
+  align-self: center;
+  box-shadow: 5px 5px 10px 5px #d4d4d4;
+  align-items: stretch;
+  border-radius: 20px;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #ffffff;
+}
+ 
+.home-li1 {
+  width: 348px;
+  height: 23px;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  padding-top: 2px;
+  flex-direction: row;
+  padding-bottom: 2px;
+  justify-content: flex-start;
+}
+ 
+.home-text2 {
+  color: #3f3f3f;
+  font-size: 20px;
+  text-align: left;
+  font-family: "Fira Sans";
+  padding-top: 0px;
+  padding-left: var(--dl-space-space-twounits);
+  padding-right: var(--dl-space-space-twounits);
+  padding-bottom: 0px;
+}
+ 
+.home-icon1 {
+  fill: var(--dl-color-theme-neutral-dark);
+  color: #ff0000;
+  width: 17px;
+  height: 17px;
+  display: flex;
+  align-self: center;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: center;
+}
+ 
+.home-text3 {
+  color: #b9b9b9;
+  font-family: "Fira Sans";
+}
+ 
+.home-li2 {
+  width: 348px;
+  height: 23px;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  padding-top: 2px;
+  flex-direction: row;
+  padding-bottom: 2px;
+  justify-content: flex-start;
+}
+ 
+.home-text4 {
+  fill: #3f3f3f;
+  color: #3f3f3f;
+  font-size: 20px;
+  font-family: "Fira Sans";
+  padding-top: 0px;
+  padding-left: var(--dl-space-space-twounits);
+  padding-right: var(--dl-space-space-twounits);
+  padding-bottom: 0px;
+}
+ 
+.home-icon3 {
+  fill: var(--dl-color-theme-neutral-dark);
+  color: #00ff0c;
+  width: 17px;
+  height: 17px;
+  align-self: center;
+}
+ 
+.home-text5 {
+  color: rgb(185, 185, 185);
+}
+ 
+.home-li3 {
+  width: 348px;
+  height: 23px;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  padding-top: 2px;
+  flex-direction: row;
+  padding-bottom: 2px;
+  justify-content: flex-start;
+}
+ 
+.home-text6 {
+  fill: #3f3f3f;
+  color: #3f3f3f;
+  font-size: 20px;
+  font-family: "Fira Sans";
+  padding-top: 0px;
+  padding-left: var(--dl-space-space-twounits);
+  padding-right: var(--dl-space-space-twounits);
+  padding-bottom: 0px;
+}
+ 
+.home-icon5 {
+  fill: var(--dl-color-theme-neutral-dark);
+  color: #ffe027;
+  width: 17px;
+  height: 17px;
+  align-self: center;
+}
+ 
+.home-text7 {
+  color: rgb(185, 185, 185);
+}
+ 
+.home-li4 {
+  width: 348px;
+  height: 23px;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  padding-top: 2px;
+  flex-direction: row;
+  padding-bottom: 2px;
+  justify-content: flex-start;
+}
+ 
+.home-text8 {
+  fill: #3f3f3f;
+  color: #3f3f3f;
+  font-size: 20px;
+  font-family: "Fira Sans";
+  padding-top: 0px;
+  padding-left: var(--dl-space-space-twounits);
+  padding-right: var(--dl-space-space-twounits);
+  padding-bottom: 0px;
+}
+ 
+.home-icon7 {
+  fill: var(--dl-color-theme-neutral-dark);
+  color: #277aff;
+  width: 17px;
+  height: 17px;
+  align-self: center;
+}
+ 
+.home-text9 {
+  color: rgb(185, 185, 185);
+}
