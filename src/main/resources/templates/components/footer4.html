@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
   <head>
-    <title>Lista Obecności</title>
+    <title>Rich Internal Mandrill</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -58,26 +58,10 @@
     />
   </head>
   <body>
-    <link rel="stylesheet" th:href="@{/style.css}"/>
+  <link rel="stylesheet" th:href="@{/style.css}" />
     <div>
-      <link rel="stylesheet" th:href="@{/index.css}" />
-
-      <div class="page-container1">
-        <label class="page-text1">Lista obecnosci</label>
-        <div class="page-container2">
-          <span class="page-text2">LOGOWANIE</span>
-          <input
-            type="text"
-            placeholder="NUMER ALBUMU"
-            class="page-textinput input"
-          />
-          <button type="button" class="page-button button">ZALOGUJ</button>
-        </div>
-        <footer4-wrapper class="footer4-wrapper">
-          <!--Footer4 component-->
-          <footer class="footer4-footer7 thq-section-padding"></footer>
-        </footer4-wrapper>
-      </div>
+      <link rel="stylesheet" th:href="@{/components/footer4.css}" />
+      <footer class="footer4-footer7 thq-section-padding"></footer>
     </div>
   </body>
 </html>
