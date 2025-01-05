@@ -66,6 +66,7 @@
         <label class="page-text1">Lista obecnosci</label>
         <div class="page-container2">
           <span class="page-text2">LOGOWANIE</span>
+          <span class="page-text2" th:text="${error}" style="color: #ff0000"/>
           <form action="#" th:action="@{/}" th:object="${login}" method="post">
           <input
             type="text"

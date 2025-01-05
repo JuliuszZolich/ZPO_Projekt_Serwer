@@ -1,18 +1,16 @@
 package org.example.WebApplication.Objects;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
-public class Student {
+@Getter @Setter public class Student {
+
     private String indeks;
+    private String imie;
+    private String nazwisko;
     private List<String> ListaObecnosciTermin;
     private List<Integer> ListaObecnosciStatus;
 
-    public List<String> getListaObecnosciTermin()
-    {
-        return ListaObecnosciTermin;
-    }
-    public List<Integer> getListaObecnosciStatus()
-    {
-        return ListaObecnosciStatus;
-    }
 }
