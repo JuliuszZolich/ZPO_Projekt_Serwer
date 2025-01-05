@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public String login(Model model) {
         model.addAttribute("login", new Login());
-        return "login";
+        return "index";
     }
-    @PostMapping("/login")
+    @PostMapping("/")
     public String login(Login login, Model model) {
         String indeks = login.getIndeks();
         if (!indeks.matches("\\d{6}")) {
             System.out.println("Niepoprawny indeks");
             model.addAttribute("error", "Niepoprawny indeks");
-            return "login";
+            return "index";
         }
         System.out.println("Indeks: " + login.getIndeks());
         model.addAttribute("indeks", login.ParseIndeks());
-        return "index";
+        return "home";
     }
 }

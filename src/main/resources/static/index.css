@@ -50,9 +50,8 @@
   font-size: 25px;
   text-align: center;
   font-family: "Fira Sans";
-  text-decoration:  ;
 }
- 
+
 .page-textinput {
   width: 368px;
   height: 47px;
@@ -75,4 +74,8 @@
   border-radius: 20px;
   margin-bottom: var(--dl-space-space-unit);
   background-color: #f5f5f5;
+}
+
+form {
+  text-align: center;
 }

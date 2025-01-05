@@ -66,12 +66,15 @@
         <label class="page-text1">Lista obecnosci</label>
         <div class="page-container2">
           <span class="page-text2">LOGOWANIE</span>
+          <form action="#" th:action="@{/}" th:object="${login}" method="post">
           <input
             type="text"
             placeholder="NUMER ALBUMU"
             class="page-textinput input"
-          />
-          <button type="button" class="page-button button">ZALOGUJ</button>
+            th:field="*{indeks}"
+          /><p></p>
+          <input type="submit" value="ZALOGUJ" class="page-button button">
+          </form>
         </div>
         <footer4-wrapper class="footer4-wrapper">
           <!--Footer4 component-->
