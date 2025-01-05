@@ -14,25 +14,44 @@ public class DatabaseUtils
     public static Connection DatabaseConnection;
     @Getter @Setter private static int SecondsToTimeout = 30;
 
-    public static Connection ConnectToDatabase(String databaseName) {
-        Connection connection = null;
+    public static void ConnectToDatabase(String databaseName) {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + databaseName);
+            DatabaseConnection =  DriverManager.getConnection("jdbc:sqlite:" + databaseName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return connection;
     }
 
     public static ResultSet ExecuteQuery(String query) {
-        ResultSet rs = null;
         try {
             Statement statement = DatabaseConnection.createStatement();
             statement.setQueryTimeout(SecondsToTimeout);
-            rs = statement.executeQuery(query);
+            statement.closeOnCompletion();
+            return statement.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return rs;
+        return null;
+    }
+
+    public static int ExecuteUpdate(String query) {
+        try {
+            Statement statement = DatabaseConnection.createStatement();
+            statement.setQueryTimeout(SecondsToTimeout);
+            statement.closeOnCompletion();
+            return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static void CloseConnection() {
+        try {
+            System.out.println("Closing connection");
+            DatabaseConnection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
