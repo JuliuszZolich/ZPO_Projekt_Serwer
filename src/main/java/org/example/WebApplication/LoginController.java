@@ -1,5 +1,7 @@
 package org.example.WebApplication;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.DatabaseUtils;
 import org.example.WebApplication.Objects.Login;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,7 @@ public class LoginController {
         return "index";
     }
     @PostMapping("/")
-    public String login(Login login, Model model) {
+    public String login(Login login, Model model, HttpServletResponse response) {
         String indeks = login.getIndeks();
         if (!indeks.matches("\\d{6}")) {
             model.addAttribute("error", "Niepoprawny indeks");
@@ -29,7 +31,8 @@ public class LoginController {
         ResultSet student = DatabaseUtils.ExecuteQuery("SELECT * FROM Studenci WHERE indeks = " + indeks);
         try {
             if (student != null && student.next()) {
-                model.addAttribute("indeks", login.ParseIndeks());
+                Cookie cookie = new Cookie("indeks", indeks);
+                response.addCookie(cookie);
                 return "home";
             }
             model.addAttribute("error", "Student o podanym indeksie nie istnieje");
