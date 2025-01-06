@@ -54,4 +54,47 @@ public class DatabaseUtils
             e.printStackTrace();
         }
     }
+
+    public static void FillDatabase(){
+        ExecuteUpdate("""
+                CREATE TABLE Student (
+                id INTEGER PRIMARY KEY,
+                indeks INTEGER NOT NULL,
+                imie VARCHAR NOT NULL,
+                nazwisko VARCHAR NOT NULL,
+                grupa_id INTEGER,
+                haslo VARCHAR NOT NULL
+                );
+        """);
+        ExecuteUpdate("""
+                CREATE TABLE Prowadzacy (
+                id INTEGER PRIMARY KEY,
+                imie VARCHAR NOT NULL,
+                nazwisko VARCHAR NOT NULL,
+                haslo VARCHAR NOT NULL
+                );
+        """);
+
+        ExecuteUpdate("""
+                CREATE TABLE Obecnosci (
+                id INTEGER PRIMARY KEY,
+                student_id INTEGER NOT NULL,
+                attendance INTEGER NOT NULL,
+                termin_id INTEGER NOT NULL,
+                FOREIGN KEY (student_id) REFERENCES Student (id),
+                FOREIGN KEY (termin_id) REFERENCES Terminy (id)
+        );
+        """);
+
+        ExecuteUpdate("""
+                CREATE TABLE Terminy (
+                id INTEGER PRIMARY KEY,
+                grupa_id INTEGER NOT NULL,
+                nazwa VARCHAR NOT NULL,
+                data DATE NOT NULL,
+                prowadzacy_id INTEGER NOT NULL,
+                FOREIGN KEY (prowadzacy_id) REFERENCES Prowadzacy (id)
+                );
+        """);
+    }
 }
