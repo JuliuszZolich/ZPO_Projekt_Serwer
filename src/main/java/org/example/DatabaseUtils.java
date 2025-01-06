@@ -57,9 +57,8 @@ public class DatabaseUtils
 
     public static void FillDatabase(){
         ExecuteUpdate("""
-                CREATE TABLE Student (
-                id INTEGER PRIMARY KEY,
-                indeks INTEGER NOT NULL,
+                CREATE TABLE IF NOT EXISTS Studenci (
+                indeks INTEGER NOT NULL PRIMARY KEY,
                 imie VARCHAR NOT NULL,
                 nazwisko VARCHAR NOT NULL,
                 grupa_id INTEGER,
@@ -67,7 +66,7 @@ public class DatabaseUtils
                 );
         """);
         ExecuteUpdate("""
-                CREATE TABLE Prowadzacy (
+                CREATE TABLE IF NOT EXISTS Prowadzacy (
                 id INTEGER PRIMARY KEY,
                 imie VARCHAR NOT NULL,
                 nazwisko VARCHAR NOT NULL,
@@ -76,7 +75,7 @@ public class DatabaseUtils
         """);
 
         ExecuteUpdate("""
-                CREATE TABLE Obecnosci (
+                CREATE TABLE IF NOT EXISTS Obecnosci (
                 id INTEGER PRIMARY KEY,
                 student_id INTEGER NOT NULL,
                 attendance INTEGER NOT NULL,
@@ -87,7 +86,7 @@ public class DatabaseUtils
         """);
 
         ExecuteUpdate("""
-                CREATE TABLE Terminy (
+                CREATE TABLE IF NOT EXISTS Terminy (
                 id INTEGER PRIMARY KEY,
                 grupa_id INTEGER NOT NULL,
                 nazwa VARCHAR NOT NULL,

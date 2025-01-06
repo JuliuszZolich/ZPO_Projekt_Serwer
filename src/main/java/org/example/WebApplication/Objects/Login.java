@@ -1,16 +1,11 @@
 package org.example.WebApplication.Objects;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Login {
 
-    private String indeks;
-
-    public void setIndeks(String indeks) {
-        this.indeks = indeks;
-    }
-
-    public String getIndeks() {
-        return indeks;
-    }
+    @Getter @Setter private String indeks;
 
     public int ParseIndeks() {
         return Integer.parseInt(indeks);

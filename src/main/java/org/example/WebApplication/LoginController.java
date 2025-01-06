@@ -26,7 +26,7 @@ public class LoginController {
             model.addAttribute("error", "Niepoprawny indeks");
             return "index";
         }
-        ResultSet student = DatabaseUtils.ExecuteQuery("SELECT * FROM students WHERE indeks = " + indeks);
+        ResultSet student = DatabaseUtils.ExecuteQuery("SELECT * FROM Studenci WHERE indeks = " + indeks);
         try {
             if (student != null && student.next()) {
                 model.addAttribute("indeks", login.ParseIndeks());
