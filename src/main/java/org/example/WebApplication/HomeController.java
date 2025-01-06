@@ -4,6 +4,7 @@ import org.example.DatabaseUtils;
 import org.example.WebApplication.Objects.Obecnosc;
 import org.example.WebApplication.Objects.Termin;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -16,12 +17,12 @@ import java.util.List;
 public class HomeController {
 
     @GetMapping("/home")
-    public String home() {
+    public String home(Model model) {
 
         // Pobierz dane terminów
         List<Termin> terminy = new ArrayList<>();
         try {
-            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT * FROM terminy");
+            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT" + model.getAttribute("index") + "FROM terminy");
             while (rs.next()) {
                 Termin termin = new Termin();
                 termin.setId(rs.getInt("id"));
@@ -38,7 +39,7 @@ public class HomeController {
         // Pobierz dane obecności
         List<Obecnosc> obecnosci = new ArrayList<>();
         try {
-            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT * FROM obecnosci");
+            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT" + model.getAttribute("index") + "FROM obecnosci");
             while (rs.next()) {
                 Obecnosc obecnosc = new Obecnosc();
                 obecnosc.setId(rs.getInt("id"));
