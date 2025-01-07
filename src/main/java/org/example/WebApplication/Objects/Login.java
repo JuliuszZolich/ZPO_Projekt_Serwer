@@ -3,9 +3,9 @@ package org.example.WebApplication.Objects;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Login {
+@Setter @Getter public class Login {
 
-    @Getter @Setter private String indeks;
+    private String indeks;
 
     public int ParseIndeks() {
         return Integer.parseInt(indeks);

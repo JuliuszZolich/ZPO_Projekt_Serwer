@@ -62,7 +62,8 @@ public class DatabaseUtils
                 imie VARCHAR NOT NULL,
                 nazwisko VARCHAR NOT NULL,
                 grupa_id INTEGER,
-                haslo VARCHAR NOT NULL
+                haslo VARCHAR NOT NULL,
+                FOREIGN KEY (grupa_id) REFERENCES Grupy (id)
                 );
         """);
         ExecuteUpdate("""
@@ -76,7 +77,7 @@ public class DatabaseUtils
 
         ExecuteUpdate("""
                 CREATE TABLE IF NOT EXISTS Obecnosci (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 student_id INTEGER NOT NULL,
                 attendance INTEGER NOT NULL,
                 termin_id INTEGER NOT NULL,
@@ -87,12 +88,20 @@ public class DatabaseUtils
 
         ExecuteUpdate("""
                 CREATE TABLE IF NOT EXISTS Terminy (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 grupa_id INTEGER NOT NULL,
                 nazwa VARCHAR NOT NULL,
                 data DATE NOT NULL,
                 prowadzacy_id INTEGER NOT NULL,
-                FOREIGN KEY (prowadzacy_id) REFERENCES Prowadzacy (id)
+                FOREIGN KEY (prowadzacy_id) REFERENCES Prowadzacy (id),
+                FOREIGN KEY (grupa_id) REFERENCES Grupy (id)
+                );
+        """);
+
+        ExecuteUpdate("""
+                CREATE TABLE IF NOT EXISTS Grupy (
+                id INTEGER PRIMARY KEY,
+                nazwa VARCHAR NOT NULL
                 );
         """);
     }

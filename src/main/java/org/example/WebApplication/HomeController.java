@@ -2,10 +2,10 @@ package org.example.WebApplication;
 
 import org.example.DatabaseUtils;
 import org.example.WebApplication.Objects.Obecnosc;
-import org.example.WebApplication.Objects.Termin;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 
 import java.sql.ResultSet;
@@ -17,41 +17,24 @@ import java.util.List;
 public class HomeController {
 
     @GetMapping("/home")
-    public String home(Model model) {
+    public String home(@ModelAttribute("index") String index, Model model) {
 
         // Pobierz dane terminów
-        List<Termin> terminy = new ArrayList<>();
-        try {
-            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT" + model.getAttribute("index") + "FROM terminy");
-            while (rs.next()) {
-                Termin termin = new Termin();
-                termin.setId(rs.getInt("id"));
-                termin.setGrupa_id(rs.getInt("grupa_id"));
-                termin.setNazwa(rs.getString("nazwa"));
-                termin.setData(rs.getDate("data"));
-                termin.setProwadzacy_id(rs.getInt("prowadzacy_id"));
-                terminy.add(termin);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // Pobierz dane obecności
         List<Obecnosc> obecnosci = new ArrayList<>();
+        System.out.println("Index: " + index);
         try {
-            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT" + model.getAttribute("index") + "FROM obecnosci");
+            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT nazwa, data, attendance FROM obecnosci JOIN terminy ON obecnosci.termin_id = terminy.id WHERE student_id = " + index);
             while (rs.next()) {
-                Obecnosc obecnosc = new Obecnosc();
-                obecnosc.setId(rs.getInt("id"));
-                obecnosc.setStudent_id(rs.getInt("student_id"));
-                obecnosc.setAttendance(rs.getInt("attendance"));
-                obecnosc.setTermin_id(rs.getInt("termin_id"));
-                obecnosci.add(obecnosc);
+                Obecnosc o = new Obecnosc();
+                o.setNazwa(rs.getString("nazwa"));
+                o.setData(rs.getString("data"));
+                o.setAttendance(rs.getInt("attendance"));
+                obecnosci.add(o);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        model.addAttribute("obecnosci", obecnosci);
         return "home";
     }
 

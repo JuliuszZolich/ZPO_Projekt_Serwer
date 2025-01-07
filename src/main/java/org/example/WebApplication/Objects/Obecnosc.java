@@ -3,10 +3,11 @@ package org.example.WebApplication.Objects;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 
 @Getter @Setter public class Obecnosc {
-    private int id;
-    private int student_id;
+    private String nazwa;
     private int attendance;
-    private int termin_id;
+    private String data;
 }

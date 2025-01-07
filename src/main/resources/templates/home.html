@@ -1,141 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>Home - Rich Internal Mandrill</title>
-    <meta property="og:title" content="Home - Rich Internal Mandrill" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta charset="utf-8" />
-    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="og:title" content="Home - Rich Internal Mandrill"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8"/>
+    <meta property="twitter:card" content="summary_large_image"/>
 
     <style data-tag="reset-style-sheet">
-      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;  -webkit-font-smoothing: antialiased;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;  color: inherit;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}details {  display: block;  margin: 0;  padding: 0;}summary::-webkit-details-marker {  display: none;}[data-thq="accordion"] [data-thq="accordion-content"] {  max-height: 0;  overflow: hidden;  transition: max-height 0.3s ease-in-out;  padding: 0;}[data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {  max-height: 300vh;}details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {  transform: rotate(180deg);}html { scroll-behavior: smooth  }
+        html {
+            line-height: 1.15;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption {
+            margin: 0;
+            padding: 0;
+        }
+
+        button {
+            background-color: transparent;
+        }
+
+        button, input, optgroup, select, textarea {
+            font-family: inherit;
+            font-size: 100%;
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        button, select {
+            text-transform: none;
+        }
+
+        button, [type="button"], [type="reset"], [type="submit"] {
+            -webkit-appearance: button;
+            color: inherit;
+        }
+
+        button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
+            border-style: none;
+            padding: 0;
+        }
+
+        button:-moz-focus, [type="button"]:-moz-focus, [type="reset"]:-moz-focus, [type="submit"]:-moz-focus {
+            outline: 1px dotted ButtonText;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        input {
+            padding: 2px 4px;
+        }
+
+        img {
+            display: block;
+        }
+
+        details {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        [data-thq="accordion"] [data-thq="accordion-content"] {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            padding: 0;
+        }
+
+        [data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {
+            max-height: 300vh;
+        }
+
+        details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {
+            transform: rotate(180deg);
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
     </style>
     <style data-tag="default-style-sheet">
-      html {
-        font-family: Inter;
-        font-size: 16px;
-      }
+        html {
+            font-family: Inter;
+            font-size: 16px;
+        }
 
-      body {
-        font-weight: 400;
-        font-style:normal;
-        text-decoration: none;
-        text-transform: none;
-        letter-spacing: normal;
-        line-height: 1.15;
-        color: var(--dl-color-theme-neutral-dark);
-        background: var(--dl-color-theme-neutral-light);
-
-        fill: var(--dl-color-theme-neutral-dark);
-      }
+        body {
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            text-transform: none;
+            letter-spacing: normal;
+            line-height: 1.15;
+            color: var(--dl-color-theme-neutral-dark);
+            background: var(--dl-color-theme-neutral-light);
+            fill: var(--dl-color-theme-neutral-dark);
+        }
     </style>
     <link
-      rel="stylesheet"
-      href="https://unpkg.com/animate.css@4.1.1/animate.css"
+            rel="stylesheet"
+            href="https://unpkg.com/animate.css@4.1.1/animate.css"
     />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-      data-tag="font"
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            data-tag="font"
     />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
-      data-tag="font"
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
+            data-tag="font"
     />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-      data-tag="font"
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            data-tag="font"
     />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-      data-tag="font"
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            data-tag="font"
     />
     <link
-      rel="stylesheet"
-      href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css"
+            rel="stylesheet"
+            href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css"
     />
-  </head>
-  <body>
-  <link rel="stylesheet" th:href="@{/style.css}" />
-    <div>
-      <link rel="stylesheet" th:href="@{/home.css}" />
+</head>
+<body>
+<link rel="stylesheet" th:href="@{/style.css}"/>
+<div>
+    <link rel="stylesheet" th:href="@{/home.css}"/>
 
-      <div class="home-container1">
-        <label class="home-text10">Lista obecnosci</label>
-        <select class="home-select">
-          <option value="Option 1">PRZEDMIOT</option>
-          <option value="Option 2">Option 2</option>
-          <option value="Option 3">Option 3</option>
-        </select>
+    <div class="home-container1">
+        <label class="tytul">Lista obecnosci</label>
         <div class="home-container2 list-item">
-          <span>TERMIN:</span>
-          <div class="home-container3">
-            <span class="home-text12">OBECNOŚĆ:</span>
-            <span>3/4</span>
-          </div>
+            <span>TERMIN:</span>
+            <div class="home-container3">
+                <span class="home-text12">OBECNOŚĆ:</span>
+                <span>3/4</span>
+            </div>
         </div>
-        <ul class="home-ul list">
-          <li class="home-li1 list-item">
-            <span class="home-text14">21.07.23</span>
-            <div class="home-container4">
-              <span class="home-text15">Nieobecny</span>
-              <svg
-                height="32"
-                width="32"
-                viewBox="0 0 32 32"
-                class="home-icon1"
-              >
-                <circle cx="16" cy="16" r="14" fill="currentColor"></circle>
-              </svg>
-            </div>
-          </li>
-          <li class="home-li2 list-item">
-            <span class="home-text16">14.07.23</span>
-            <div class="home-container5">
-              <span class="home-text17">Obecny</span>
-              <svg
-                height="32"
-                width="32"
-                viewBox="0 0 32 32"
-                class="home-icon3"
-              >
-                <circle cx="16" cy="16" r="14" fill="currentColor"></circle>
-              </svg>
-            </div>
-          </li>
-          <li class="home-li3 list-item">
-            <span class="home-text18">7.07.23</span>
-            <div class="home-container6">
-              <span class="home-text19">Spóźniony</span>
-              <svg
-                height="32"
-                width="32"
-                viewBox="0 0 32 32"
-                class="home-icon5"
-              >
-                <circle cx="16" cy="16" r="14" fill="currentColor"></circle>
-              </svg>
-            </div>
-          </li>
-          <li class="home-li4 list-item">
-            <span class="home-text20">1.07.23</span>
-            <div class="home-container7">
-              <span class="home-text21">Usprawiedliwony</span>
-              <svg
-                height="32"
-                width="32"
-                viewBox="0 0 32 32"
-                class="home-icon7"
-              >
-                <circle cx="16" cy="16" r="14" fill="currentColor"></circle>
-              </svg>
-            </div>
-          </li>
-        </ul>
-      </div>
+        <div class="home-container4">
+            <ul class="home-ul list">
+                <li th:class="home-li1"  th:each="obecnosc: ${obecnosci}">
+                    <span th:text="${obecnosc.data}" class="text-data"></span>
+                    <span th:text="${obecnosc.nazwa}" class="text-tytul"></span>
+                    <span th:if="${obecnosc.attendance == 1}" class="text-obecnosc">Nieobecny</span>
+                    <span th:if="${obecnosc.attendance == 2}" class="text-obecnosc">Obecny</span>
+                    <span th:if="${obecnosc.attendance == 3}" class="text-obecnosc">Spóźniony</span>
+                    <span th:if="${obecnosc.attendance == 4}" class="text-obecnosc">Usprawiedliwiony</span>
+                    <svg height="32" width="32" viewBox="0 0 32 32" class="home-icon1">
+                        <circle cx="16" cy="16" r="14" fill="currentColor"></circle>
+                    </svg>
+                </li>
+            </ul>
+        </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

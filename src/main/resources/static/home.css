@@ -7,8 +7,8 @@
   justify-content: flex-start;
   background-color: #fffcf7;
 }
- 
-.home-text10 {
+
+.tytul {
   fill: #3f3f3f;
   color: #3f3f3f;
   font-size: 40px;
@@ -18,20 +18,8 @@
   padding-bottom: var(--dl-space-space-unit);
   text-transform: uppercase;
 }
- 
-.home-select {
-  gap: var(--dl-space-space-unit);
-  width: 368px;
-  height: 69px;
-  margin: var(--dl-space-space-unit);
-  display: flex;
-  padding: var(--dl-space-space-halfunit);
-  align-self: center;
-  box-shadow: 5px 5px 10px 5px #d4d4d4;
-  border-radius: 20px;
-  justify-content: flex-start;
-}
- 
+
+
 .home-container2 {
   width: 365px;
   height: 33px;
@@ -50,17 +38,17 @@
   justify-content: space-between;
   background-color: #ffffff;
 }
- 
+
 .home-container3 {
   flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
 }
- 
+
 .home-text12 {
   margin-right: var(--dl-space-space-halfunit);
 }
- 
+
 .home-ul {
   width: 368px;
   height: 329px;
@@ -74,7 +62,7 @@
   justify-content: flex-start;
   background-color: #ffffff;
 }
- 
+
 .home-li1 {
   width: 348px;
   height: 23px;
@@ -86,8 +74,8 @@
   padding-bottom: 2px;
   justify-content: space-between;
 }
- 
-.home-text14 {
+
+.text-data {
   color: rgb(63, 63, 63);
   font-size: 20px;
   text-align: left;
@@ -97,20 +85,20 @@
   padding-right: var(--dl-space-space-unit);
   padding-bottom: 0px;
 }
- 
+
 .home-container4 {
   flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
 }
- 
-.home-text15 {
+
+.text-obecnosc {
   color: #b9b9b9;
   font-family: "Fira Sans";
   margin-right: var(--dl-space-space-halfunit);
 }
- 
+
 .home-icon1 {
   fill: var(--dl-color-theme-neutral-dark);
   color: #ff0000;
@@ -121,133 +109,4 @@
   align-items: stretch;
   flex-direction: row;
   justify-content: center;
-}
- 
-.home-li2 {
-  width: 348px;
-  height: 23px;
-  display: flex;
-  align-self: center;
-  align-items: center;
-  padding-top: 2px;
-  flex-direction: row;
-  padding-bottom: 2px;
-  justify-content: space-between;
-}
- 
-.home-text16 {
-  fill: #3f3f3f;
-  color: rgb(63, 63, 63);
-  font-size: 20px;
-  font-family: "Fira Sans";
-  padding-top: 0px;
-  padding-left: var(--dl-space-space-unit);
-  padding-right: var(--dl-space-space-unit);
-  padding-bottom: 0px;
-}
- 
-.home-container5 {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
- 
-.home-text17 {
-  color: rgb(185, 185, 185);
-  margin-right: var(--dl-space-space-halfunit);
-}
- 
-.home-icon3 {
-  fill: var(--dl-color-theme-neutral-dark);
-  color: #00ff0c;
-  width: 17px;
-  height: 17px;
-  align-self: center;
-}
- 
-.home-li3 {
-  width: 348px;
-  height: 23px;
-  display: flex;
-  align-self: center;
-  align-items: center;
-  padding-top: 2px;
-  flex-direction: row;
-  padding-bottom: 2px;
-  justify-content: space-between;
-}
- 
-.home-text18 {
-  fill: #3f3f3f;
-  color: rgb(63, 63, 63);
-  font-size: 20px;
-  font-family: "Fira Sans";
-  padding-top: 0px;
-  padding-left: var(--dl-space-space-unit);
-  padding-right: var(--dl-space-space-unit);
-  padding-bottom: 0px;
-}
- 
-.home-container6 {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
- 
-.home-text19 {
-  color: rgb(185, 185, 185);
-  margin-right: var(--dl-space-space-halfunit);
-}
- 
-.home-icon5 {
-  fill: var(--dl-color-theme-neutral-dark);
-  color: #ffe027;
-  width: 17px;
-  height: 17px;
-  align-self: center;
-}
- 
-.home-li4 {
-  width: 348px;
-  height: 23px;
-  display: flex;
-  align-self: center;
-  align-items: center;
-  padding-top: 2px;
-  flex-direction: row;
-  padding-bottom: 2px;
-  justify-content: space-between;
-}
- 
-.home-text20 {
-  fill: #3f3f3f;
-  color: rgb(63, 63, 63);
-  font-size: 20px;
-  font-family: "Fira Sans";
-  padding-top: 0px;
-  padding-left: var(--dl-space-space-unit);
-  padding-right: var(--dl-space-space-unit);
-  padding-bottom: 0px;
-}
- 
-.home-container7 {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
- 
-.home-text21 {
-  color: rgb(185, 185, 185);
-  margin-right: var(--dl-space-space-halfunit);
-}
- 
-.home-icon7 {
-  fill: var(--dl-color-theme-neutral-dark);
-  color: #277aff;
-  width: 17px;
-  height: 17px;
-  align-self: center;
 }
