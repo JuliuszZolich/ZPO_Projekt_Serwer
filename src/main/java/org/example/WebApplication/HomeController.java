@@ -1,20 +1,27 @@
 package org.example.WebApplication;
 
-import org.example.DatabaseUtils;
+import org.example.Database.Objects.Termin;
+import org.example.Database.Repositories.ObecnoscRepository;
+import org.example.Database.Repositories.TerminRepository;
 import org.example.WebApplication.Objects.Obecnosc;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    private ObecnoscRepository obecnoscRepository;
+    @Autowired
+    private TerminRepository terminRepository;
 
     @GetMapping("/home")
     public String home(@ModelAttribute("index") String index, Model model) {
@@ -23,15 +30,20 @@ public class HomeController {
         List<Obecnosc> obecnosci = new ArrayList<>();
         System.out.println("Index: " + index);
         try {
-            ResultSet rs = DatabaseUtils.ExecuteQuery("SELECT nazwa, data, attendance FROM obecnosci JOIN terminy ON obecnosci.termin_id = terminy.id WHERE student_id = " + index);
-            while (rs.next()) {
+            List<org.example.Database.Objects.Obecnosc> obecnosciDB = obecnoscRepository.findBystudentId(Integer.parseInt(index));
+
+            for (org.example.Database.Objects.Obecnosc obecnosc : obecnosciDB) {
+                if (terminRepository.findById(obecnosc.getTerminId()).isEmpty()){
+                    continue;
+                }
+                Termin termin = terminRepository.findById(obecnosc.getTerminId()).get();
                 Obecnosc o = new Obecnosc();
-                o.setNazwa(rs.getString("nazwa"));
-                o.setData(rs.getString("data"));
-                o.setAttendance(rs.getInt("attendance"));
+                o.setNazwa(termin.getNazwa());
+                o.setData(String.valueOf(termin.getData()));
+                o.setAttendance(obecnosc.getAttendance());
                 obecnosci.add(o);
             }
-        } catch (SQLException e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
             e.printStackTrace();
         }
         model.addAttribute("obecnosci", obecnosci);

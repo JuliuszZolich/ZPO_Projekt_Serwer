@@ -1,187 +1,194 @@
 package org.example.WebApplication;
 
-import org.example.DatabaseUtils;
-import org.example.WebApplication.Objects.Prowadzacy;
-import org.example.WebApplication.Objects.ProwadzacyLogin;
-import org.example.WebApplication.Objects.Student;
-import org.example.WebApplication.Objects.Termin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletRequest;
+import org.example.Database.Objects.Grupa;
+import org.example.Database.Objects.Prowadzacy;
+import org.example.Database.Objects.Student;
+import org.example.Database.Objects.Termin;
+import org.example.Database.Repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 @RestController
 public class ApiController {
+
+    Logger logger = LoggerFactory.getLogger(ApiController.class);
+
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private ProwadzacyRepository prowadzacyRepository;
+    @Autowired
+    private TerminRepository terminRepository;
+    @Autowired
+    private ObecnoscRepository obecnoscRepository;
+    @Autowired
+    private GrupaRepository grupaRepository;
+
+    @GetMapping("/api/studenci")
+    public List<Student> getStudents(HttpServletRequest request) {
+
+        return studentRepository.findAll();
+    }
+
     @PostMapping("/api/dodajstudenta")
-    public String AddStudent(@RequestBody Student student) {
-        int ret = DatabaseUtils.ExecuteUpdate("INSERT INTO Studenci VALUES (" +
-                student.getIndeks() + ", '" +
-                student.getImie() + "', '" +
-                student.getNazwisko() + "', " +
-                student.getGrupa_id() + ", '" +
-                student.getHaslo() + "')");
-        if (ret != 1) {
-            return String.format("""
-                    {
-                    "error": "Nie udało się dodać studenta",
-                    "error_value": %d,
-                    "error_code: -1
-                    }
-                    """, student.getIndeks());
-        }
+    public String addStudent(@RequestParam int indeks, @RequestParam String imie, @RequestParam String nazwisko, HttpServletRequest request) {
+        logger.info("Dodawanie studenta: {} {} {} z adresu : {}", indeks, imie, nazwisko, request.getRemoteAddr());
+        Student student = new Student();
+        student.setIndeks(indeks);
+        student.setImie(imie);
+        student.setNazwisko(nazwisko);
+        student.setGrupaId(null);
+        studentRepository.save(student);
         return """
                 {
                 "error": "",
-                "error_value": 200,
-                "error_code: 0
+                "error_code: 200
                 }
                 """;
     }
 
     @PostMapping("/api/login")
-    public String Login(@RequestBody ProwadzacyLogin login) {
-        ResultSet ret = DatabaseUtils.ExecuteQuery("SELECT * FROM Prowadzacy WHERE id = '" + login.getLogin() + "' AND haslo = '" + login.getPassword() + "'");
-        try {
-            if (ret == null || !ret.next()) {
-                return """
-                        {
-                        "error": "Niepoprawne dane logowania",
-                        "error_value": 401,
-                        "error_code: -1
-                        }
-                        """;
-            }
-            Prowadzacy prowadzacy = new Prowadzacy();
-            prowadzacy.setId(ret.getInt("id"));
-            prowadzacy.setImie(ret.getString("imie"));
-            prowadzacy.setNazwisko(ret.getString("nazwisko"));
-            prowadzacy.setHaslo(ret.getString("haslo"));
-            return """
-                {
-                "id": %d,
-                "imie": "%s",
-                "nazwisko": "%s",
-                "haslo": "%s"
-                }
-                """.formatted(prowadzacy.getId(), prowadzacy.getImie(), prowadzacy.getNazwisko(), prowadzacy.getHaslo());
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            return """
-                    {
-                    "error": "Błąd bazy danych",
-                    "error_value": 500,
-                    "error_code: -1
-                    }
-                    """;
+    public Prowadzacy login(@RequestParam int login, @RequestParam  String password, HttpServletRequest request) {
+        logger.info("Logowanie prowadzacego: {} z adresu: {}", login, request.getRemoteAddr());
+        try{
+            return prowadzacyRepository.findByIdAndHaslo(login, password);
+        } catch (Exception e) {
+            logger.error("Błąd logowania prowadzacego: {} z adresu: {}", login, request.getRemoteAddr());
+            return null;
         }
 
     }
 
     @PostMapping("/api/usunstudenta")
-    public String RemoveStudent(@RequestBody int id) {
-        int ret = DatabaseUtils.ExecuteUpdate("DELETE FROM Studenci WHERE id = " + id);
-        if (ret != 1) {
-            return String.format("""
-                    {
-                    "error": "Nie ma takiego studenta",
-                    "error_value": %d,
-                    "error_code: -1
-                    }
-                    """, id);
-        }
+    public String removeStudent(@RequestParam int id, HttpServletRequest request) {
+        logger.info("Usuwanie studenta o id: {} z adresu: {}", id, request.getRemoteAddr());
+        studentRepository.deleteById(id);
         return """
                 {
                 "error": "",
-                "error_value": 200,
-                "error_code: 0
+                "error_code: 200
                 }
                 """;
     }
 
     @PostMapping("/api/dodajstudentagrupa")
-    public String AddStudentToGroup(@RequestBody int student_id, @RequestBody int group_id) {
-        int ret = DatabaseUtils.ExecuteUpdate("UPDATE Studenci SET grupa_id = " + group_id + " WHERE id = " + student_id);
-        if (ret != 1) {
-            return String.format("""
+    public String addStudentToGroup(@RequestParam int studentId, @RequestParam int groupId, HttpServletRequest request) {
+        logger.info("Dodawanie studenta o id: {} do grupy o id: {} z adresu: {}", studentId, groupId, request.getRemoteAddr());
+        if (studentRepository.findById(studentId).isEmpty()){
+            logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
+            return """
                     {
                     "error": "Nie ma takiego studenta",
-                    "error_value": %d,
-                    "error_code: -1
+                    "error_code: 404
                     }
-                    """, student_id);
+                    """;
         }
+        Student student = studentRepository.findById(studentId).get();
+        student.setGrupaId(groupId);
+        studentRepository.save(student);
         return """
                 {
                 "error": "",
-                "error_value": 200,
-                "error_code: 0
+                "error_code: 200
                 }
                 """;
     }
 
     @PostMapping("/api/usunstudentagrupa")
-    public String RemoveStudentFromGroup(@RequestBody int student_id) {
-        int ret = DatabaseUtils.ExecuteUpdate("UPDATE Studenci SET grupa_id = NULL WHERE id = " + student_id);
-        if (ret != 1) {
-            return String.format("""
+    public String removeStudentFromGroup(@RequestParam int studentId, HttpServletRequest request) {
+        logger.info("Usuwanie studenta o id: {} z grupy z adresu: {}", studentId, request.getRemoteAddr());
+        if (studentRepository.findById(studentId).isEmpty()) {
+            logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
+            return """
                     {
                     "error": "Nie ma takiego studenta",
-                    "error_value": %d,
-                    "error_code: -1
+                    "error_code": 404
                     }
-                    """, student_id);
+                    """;
         }
+        Student student = studentRepository.findById(studentId).get();
+        student.setGrupaId(null);
+        studentRepository.save(student);
         return """
                 {
                 "error": "",
-                "error_value": 200,
-                "error_code: 0
+                "error_code": 200
                 }
                 """;
     }
 
     @PostMapping("/api/dodajtermin")
-    public String AddTerm(@RequestBody Termin termin) {
-        int ret = DatabaseUtils.ExecuteUpdate("INSERT INTO Terminy VALUES (" +
-                termin.getId() + ", " +
-                termin.getGrupa_id() + ", '" +
-                termin.getNazwa() + "', '" +
-                termin.getData() + "', " +
-                termin.getProwadzacy_id() + ")");
-        if (ret != 1) {
-            return String.format("""
-                    {
-                    "error": "Nie udało się dodać terminu",
-                    "error_value": %d,
-                    "error_code: -1
-                    }
-                    """, termin.getId());
-        }
+    public String addTerm(@RequestParam int grupaId, @RequestParam String nazwa, @RequestParam String data, @RequestParam int prowadzacyId, HttpServletRequest request) {
+        logger.info("Dodawanie terminu: {} {} {} {} z adresu: {}", grupaId, nazwa, data, prowadzacyId, request.getRemoteAddr());
+        Termin termin = new Termin();
+        termin.setGrupaId(grupaId);
+        termin.setNazwa(nazwa);
+        termin.setData(data);
+        termin.setProwadzacyId(prowadzacyId);
+        terminRepository.save(termin);
         return """
                 {
                 "error": "",
-                "error_value": 200,
-                "error_code: 0
+                "error_code: 200
                 }
                 """;
     }
 
     @PostMapping("/api/usuntermin")
-    public String RemoveTerm(@RequestBody int termin_id) {
-        int ret = DatabaseUtils.ExecuteUpdate("DELETE FROM Terminy WHERE id = " + termin_id);
-        if (ret != 1) {
-            return String.format("""
-                    {
-                    "error": "Nie ma takiego terminu",
-                    "error_value": %d,
-                    "error_code: -1
-                    }
-                    """, termin_id);
+    public String removeTerm(@RequestParam int terminId, HttpServletRequest request) {
+        logger.info("Usuwanie terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
+        terminRepository.deleteById(terminId);
+        return """
+                {
+                "error": "",
+                "error_code: 200
+                }
+                """;
+    }
+
+    @GetMapping("/api/sprawdzobecnosc")
+    public String checkAttendance(HttpServletRequest request) {
+        return ":D";
+    }
+
+    @GetMapping("/api/grupy")
+    public List<Grupa> getGroups(HttpServletRequest request) {
+        logger.info("Pobieranie grup z adresu: {}", request.getRemoteAddr());
+        return grupaRepository.findAll();
+    }
+
+    @PostMapping("/api/dodajgrupe")
+    public String addGroup(@RequestParam String nazwa, HttpServletRequest request) {
+        logger.info("Dodawanie grupy: {} z adresu: {}", nazwa, request.getRemoteAddr());
+        Grupa grupa = new Grupa();
+        grupa.setNazwa(nazwa);
+        try{
+            grupaRepository.save(grupa);
+            return """
+                {
+                "error": "",
+                "error_code: 200
+                }
+                """;
+        } catch (Exception e) {
+            return """
+                {
+                "error": "Nie udało się dodać grupy",
+                "error_code: 403
+                }
+                """;
         }
+    }
+
+    @PostMapping("/api/usungrupe")
+    public String removeGroup(@RequestParam int groupId, HttpServletRequest request) {
+        logger.info("Usuwanie grupy o id: {} z adresu: {}", groupId, request.getRemoteAddr());
+        grupaRepository.deleteById(groupId);
         return """
                 {
                 "error": "",
@@ -191,52 +198,8 @@ public class ApiController {
                 """;
     }
 
-    @GetMapping("/api/sprawdzobecnosc")
-    public String CheckAttendance() {
-        return ":D";
-    }
-
-    @GetMapping("/api/grupy")
-    public String GetGroups() {
-        ResultSet ret = DatabaseUtils.ExecuteQuery("SELECT * FROM Grupy");
-        try {
-            if (ret == null) {
-                return """
-                        {
-                        "error": "Błąd bazy danych",
-                        "error_value": 500,
-                        "error_code: -1
-                        }
-                        """;
-            }
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            while (ret.next()) {
-                sb.append(String.format("""
-                        {
-                        "id": %d,
-                        "nazwa": "%s"
-                        },
-                        """, ret.getInt("id"), ret.getString("nazwa")));
-            }
-            sb.deleteCharAt(sb.length()-2);
-            sb.append("]");
-            return sb.toString();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            return """
-                    {
-                    "error": "Błąd bazy danych",
-                    "error_value": 500,
-                    "error_code: -1
-                    }
-                    """;
-        }
-    }
-
     @GetMapping("/api/dziennik")
-    public String CheckAttendanceList() {
+    public String checkAttendanceList(HttpServletRequest request) {
         return """
                 {"id": 2137}
                 """;
