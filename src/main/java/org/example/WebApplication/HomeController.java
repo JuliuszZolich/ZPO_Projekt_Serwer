@@ -1,15 +1,17 @@
 package org.example.WebApplication;
 
+import org.example.Database.Objects.Obecnosc;
 import org.example.Database.Objects.Termin;
 import org.example.Database.Repositories.ObecnoscRepository;
 import org.example.Database.Repositories.TerminRepository;
-import org.example.WebApplication.Objects.Obecnosc;
+import org.example.WebApplication.Objects.ObecnoscWeb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.NoSuchElementException;
 @Controller
 public class HomeController {
 
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+
     @Autowired
     private ObecnoscRepository obecnoscRepository;
     @Autowired
@@ -25,19 +29,16 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(@ModelAttribute("index") String index, Model model) {
-
-        // Pobierz dane terminów
-        List<Obecnosc> obecnosci = new ArrayList<>();
-        System.out.println("Index: " + index);
+        List<ObecnoscWeb> obecnosci = new ArrayList<>();
         try {
-            List<org.example.Database.Objects.Obecnosc> obecnosciDB = obecnoscRepository.findBystudentId(Integer.parseInt(index));
+            List<Obecnosc> obecnosciDB = obecnoscRepository.findBystudentId(Integer.parseInt(index));
 
-            for (org.example.Database.Objects.Obecnosc obecnosc : obecnosciDB) {
+            for (Obecnosc obecnosc : obecnosciDB) {
                 if (terminRepository.findById(obecnosc.getTerminId()).isEmpty()){
                     continue;
                 }
                 Termin termin = terminRepository.findById(obecnosc.getTerminId()).get();
-                Obecnosc o = new Obecnosc();
+                ObecnoscWeb o = new ObecnoscWeb();
                 o.setNazwa(termin.getNazwa());
                 o.setData(String.valueOf(termin.getData()));
                 o.setAttendance(obecnosc.getAttendance());
@@ -47,6 +48,7 @@ public class HomeController {
             e.printStackTrace();
         }
         model.addAttribute("obecnosci", obecnosci);
+        model.addAttribute("lista", new ArrayList<String>());
         return "home";
     }
 

@@ -67,12 +67,12 @@
         <div class="page-container2">
           <span class="page-text2">LOGOWANIE</span>
           <span class="page-text2" th:text="${error}" style="color: #ff0000"/>
-          <form action="#" th:action="@{/}" th:object="${login}" method="post">
+          <form action="#" th:action="@{/}" method="post">
           <input
             type="text"
             placeholder="NUMER ALBUMU"
             class="page-textinput input"
-            th:field="*{indeks}"
+            name="login"
           /><p></p>
           <input type="submit" value="ZALOGUJ" class="page-button button">
           </form>

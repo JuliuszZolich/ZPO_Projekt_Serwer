@@ -1,181 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Home - Rich Internal Mandrill</title>
-    <meta property="og:title" content="Home - Rich Internal Mandrill"/>
+    <title>Home - Attendance List</title>
+    <meta property="og:title" content="Home - Attendance List"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta charset="utf-8"/>
     <meta property="twitter:card" content="summary_large_image"/>
 
-    <style data-tag="reset-style-sheet">
-        html {
-            line-height: 1.15;
-        }
-
-        body {
-            margin: 0;
-        }
-
-        * {
-            box-sizing: border-box;
-            border-width: 0;
-            border-style: solid;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption {
-            margin: 0;
-            padding: 0;
-        }
-
-        button {
-            background-color: transparent;
-        }
-
-        button, input, optgroup, select, textarea {
-            font-family: inherit;
-            font-size: 100%;
-            line-height: 1.15;
-            margin: 0;
-        }
-
-        button, select {
-            text-transform: none;
-        }
-
-        button, [type="button"], [type="reset"], [type="submit"] {
-            -webkit-appearance: button;
-            color: inherit;
-        }
-
-        button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
-            border-style: none;
-            padding: 0;
-        }
-
-        button:-moz-focus, [type="button"]:-moz-focus, [type="reset"]:-moz-focus, [type="submit"]:-moz-focus {
-            outline: 1px dotted ButtonText;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: inherit;
-        }
-
-        input {
-            padding: 2px 4px;
-        }
-
-        img {
-            display: block;
-        }
-
-        details {
-            display: block;
-            margin: 0;
-            padding: 0;
-        }
-
-        summary::-webkit-details-marker {
-            display: none;
-        }
-
-        [data-thq="accordion"] [data-thq="accordion-content"] {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-            padding: 0;
-        }
-
-        [data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {
-            max-height: 300vh;
-        }
-
-        details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {
-            transform: rotate(180deg);
-        }
-
-        html {
-            scroll-behavior: smooth
-        }
-    </style>
-    <style data-tag="default-style-sheet">
-        html {
-            font-family: Inter;
-            font-size: 16px;
-        }
-
-        body {
-            font-weight: 400;
-            font-style: normal;
-            text-decoration: none;
-            text-transform: none;
-            letter-spacing: normal;
-            line-height: 1.15;
-            color: var(--dl-color-theme-neutral-dark);
-            background: var(--dl-color-theme-neutral-light);
-            fill: var(--dl-color-theme-neutral-dark);
-        }
-    </style>
-    <link
-            rel="stylesheet"
-            href="https://unpkg.com/animate.css@4.1.1/animate.css"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-            data-tag="font"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
-            data-tag="font"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-            data-tag="font"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-            data-tag="font"
-    />
-    <link
-            rel="stylesheet"
-            href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css"
-    />
+    <link rel="stylesheet" th:href="@{/home.css}"/>
+    <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"/>
 </head>
 <body>
-<link rel="stylesheet" th:href="@{/style.css}"/>
-<div>
-    <link rel="stylesheet" th:href="@{/home.css}"/>
-
-    <div class="home-container1">
-        <label class="tytul">Lista obecnosci</label>
-        <div class="home-container2 list-item">
-            <span>TERMIN:</span>
-            <div class="home-container3">
-                <span class="home-text12">OBECNOŚĆ:</span>
-                <span>3/4</span>
-            </div>
-        </div>
-        <div class="home-container4">
-            <ul class="home-ul list">
-                <li th:class="home-li1"  th:each="obecnosc: ${obecnosci}">
-                    <span th:text="${obecnosc.data}" class="text-data"></span>
-                    <span th:text="${obecnosc.nazwa}" class="text-tytul"></span>
-                    <span th:if="${obecnosc.attendance == 1}" class="text-obecnosc">Nieobecny</span>
-                    <span th:if="${obecnosc.attendance == 2}" class="text-obecnosc">Obecny</span>
-                    <span th:if="${obecnosc.attendance == 3}" class="text-obecnosc">Spóźniony</span>
-                    <span th:if="${obecnosc.attendance == 4}" class="text-obecnosc">Usprawiedliwiony</span>
-                    <svg height="32" width="32" viewBox="0 0 32 32" class="home-icon1">
-                        <circle cx="16" cy="16" r="14" fill="currentColor"></circle>
-                    </svg>
-                </li>
-            </ul>
+<div class="container">
+    <label class="title">Lista obecności</label>
+    <div class="attendance-info">
+        <span>Zajęcia:</span>
+        <div style="text-align: right;width: 100%">
+            <span>Liczba obecności:</span>
+            <span id = "iloscObecnosci" th:text="${obecnosci.size()}+'/'+${obecnosci.size()}"></span>
         </div>
     </div>
+    <select id="attendance-dropdown" class="select-dropdown">
+        <option value="">Wybierz zajęcia</option>
+        <option th:each="ObecnoscWeb: ${obecnosci}"
+                th:if="${!lista.contains(ObecnoscWeb.nazwa)}"
+                th:addValue="${lista.add(ObecnoscWeb.nazwa)}"
+                th:value="${ObecnoscWeb.nazwa}"
+                th:text="${ObecnoscWeb.nazwa}">
+        </option>
+    </select>
+    <div class="attendance-list">
+        <ul>
+            <li th:each="ObecnoscWeb: ${obecnosci}" class="attendance-item" th:data-nazwa="${ObecnoscWeb.nazwa}" th:data-obecnosc="${ObecnoscWeb.attendance}">
+                <span th:text="${ObecnoscWeb.data}"></span>
+                <span th:text="${ObecnoscWeb.nazwa}" style="text-align: center"></span>
+                <span th:if="${ObecnoscWeb.attendance == 1}" class="attendance-status">Nieobecny</span>
+                <span th:if="${ObecnoscWeb.attendance == 2}" class="attendance-status">Obecny</span>
+                <span th:if="${ObecnoscWeb.attendance == 3}" class="attendance-status">Spóźniony</span>
+                <span th:if="${ObecnoscWeb.attendance == 4}" class="attendance-status">Usprawiedliwiony</span>
+                <span style="display: flex; justify-content: flex-end;">
+                    <svg th:if="${ObecnoscWeb.attendance == 1}" class="icon" viewBox="0 0 32 32" style="fill:red">
+                        <circle cx="16" cy="16" r="14"></circle>
+                    </svg>
+                    <svg th:if="${ObecnoscWeb.attendance == 2}" class="icon" viewBox="0 0 32 32" style="fill:green">
+                        <circle cx="16" cy="16" r="14"></circle>
+                    </svg>
+                    <svg th:if="${ObecnoscWeb.attendance == 3}" class="icon" viewBox="0 0 32 32" style="fill:yellow">
+                        <circle cx="16" cy="16" r="14"></circle>
+                    </svg>
+                    <svg th:if="${ObecnoscWeb.attendance == 4}" class="icon" viewBox="0 0 32 32" style="fill:blue">
+                        <circle cx="16" cy="16" r="14"></circle>
+                    </svg>
+                </span>
+            </li>
+        </ul>
+    </div>
 </div>
+
+<script>
+    function updateAttendanceList() {
+        const selectedValue = document.getElementById('attendance-dropdown').value;
+        const items = document.querySelectorAll('.attendance-item');
+        let obecny = 0;
+        let all = 0;
+        items.forEach(item => {
+            if (selectedValue === "") {
+                item.style.display = 'flex';
+                if(parseInt(item.getAttribute('data-obecnosc')) === 2){
+                    obecny++;
+                }
+                all++;
+                return;
+            }
+            if (item.getAttribute('data-nazwa') === selectedValue) {
+                item.style.display = 'flex';
+                if(parseInt(item.getAttribute('data-obecnosc')) === 2){
+                    obecny++;
+                }
+                all++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        document.getElementById('iloscObecnosci').innerText = obecny + '/' + all;
+    }
+
+    function setAttendanceStats(){
+        const items = document.querySelectorAll('.attendance-item');
+        let obecny = 0;
+        let all = 0;
+        items.forEach(item => {
+            if(parseInt(item.getAttribute('data-obecnosc')) === 2){
+                obecny++;
+            }
+            all++;
+        });
+        document.getElementById('iloscObecnosci').innerText = obecny + '/' + all;
+    }
+
+    setAttendanceStats();
+    document.getElementById('attendance-dropdown').addEventListener('change', updateAttendanceList);
+</script>
+
 </body>
 </html>
