@@ -1,4 +1,4 @@
-package org.example.WebApplication;
+package org.example.WebApplication.Objects;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.Database.Objects.Grupa;
@@ -196,6 +196,11 @@ public class ApiController {
     public String removeGroup(@RequestParam int grupaId, HttpServletRequest request) {
         logger.info("Usuwanie grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
         grupaRepository.deleteById(grupaId);
+        List<Student> students = studentRepository.findByGrupaId(grupaId);
+        for (Student student : students) {
+            student.setGrupaId(null);
+            studentRepository.save(student);
+        }
         return """
                 {
                 "error": "",
