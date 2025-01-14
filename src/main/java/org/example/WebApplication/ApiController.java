@@ -31,7 +31,6 @@ public class ApiController {
 
     @GetMapping("/api/studenci")
     public List<Student> getStudents(HttpServletRequest request) {
-
         return studentRepository.findAll();
     }
 
@@ -163,7 +162,7 @@ public class ApiController {
     }
 
     @PostMapping("/api/dodajgrupe")
-    public String addGroup(@RequestParam String nazwa, HttpServletRequest request) {
+    public String addGroup(@RequestParam String nazwa   , HttpServletRequest request) {
         logger.info("Dodawanie grupy: {} z adresu: {}", nazwa, request.getRemoteAddr());
         Grupa grupa = new Grupa();
         grupa.setNazwa(nazwa);
@@ -186,9 +185,9 @@ public class ApiController {
     }
 
     @PostMapping("/api/usungrupe")
-    public String removeGroup(@RequestParam int groupId, HttpServletRequest request) {
-        logger.info("Usuwanie grupy o id: {} z adresu: {}", groupId, request.getRemoteAddr());
-        grupaRepository.deleteById(groupId);
+    public String removeGroup(@RequestParam int grupaId, HttpServletRequest request) {
+        logger.info("Usuwanie grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
+        grupaRepository.deleteById(grupaId);
         return """
                 {
                 "error": "",

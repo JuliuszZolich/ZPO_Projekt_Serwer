@@ -1,16 +1,16 @@
 package org.example;
 
-import org.example.WebApplication.HttpApplication;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+@SpringBootApplication(scanBasePackages = "org.example")
+@EntityScan("org.example.Database.Objects")
+@EnableJpaRepositories("org.example.Database.Repositories")
 
 public class Main {
     public static void main(String[] args) {
-
-        //TODO Encje (podjebać z prezentacji z wykładu)
-
-        //DatabaseUtils.ConnectToDatabase("mydb.db"); // Baza danych
-        //DatabaseUtils.FillDatabase();
-        //DatabaseUtils.CloseConnection(); // Zamknięcie połączenia z bazą danych
-        HttpApplication.main(new String[]{}); // Strona internetowa dla studenta
+        SpringApplication.run(Main.class, args);
     }
 }
