@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class ApiController {
 
     Logger logger = LoggerFactory.getLogger(ApiController.class);
-
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -29,12 +29,20 @@ public class ApiController {
     @Autowired
     private GrupaRepository grupaRepository;
 
-    @GetMapping("/api/studenci")
+    @GetMapping("/studenci")
     public List<Student> getStudents(HttpServletRequest request) {
+        logger.info("Pobieranie studentów z adresu: {}", request.getRemoteAddr());
         return studentRepository.findAll();
     }
 
-    @PostMapping("/api/dodajstudenta")
+    @GetMapping("/studencigrupa")
+    public List<Student> getStudentsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
+        logger.info("Pobieranie studentów z grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
+        return studentRepository.findByGrupaId(grupaId);
+    }
+
+
+    @PostMapping("/dodajstudenta")
     public String addStudent(@RequestParam int indeks, @RequestParam String imie, @RequestParam String nazwisko, HttpServletRequest request) {
         logger.info("Dodawanie studenta: {} {} {} z adresu : {}", indeks, imie, nazwisko, request.getRemoteAddr());
         Student student = new Student();
@@ -51,7 +59,7 @@ public class ApiController {
                 """;
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public Prowadzacy login(@RequestParam int login, @RequestParam  String password, HttpServletRequest request) {
         logger.info("Logowanie prowadzacego: {} z adresu: {}", login, request.getRemoteAddr());
         try{
@@ -63,7 +71,7 @@ public class ApiController {
 
     }
 
-    @PostMapping("/api/usunstudenta")
+    @PostMapping("/usunstudenta")
     public String removeStudent(@RequestParam int id, HttpServletRequest request) {
         logger.info("Usuwanie studenta o id: {} z adresu: {}", id, request.getRemoteAddr());
         studentRepository.deleteById(id);
@@ -75,7 +83,7 @@ public class ApiController {
                 """;
     }
 
-    @PostMapping("/api/dodajstudentagrupa")
+    @PostMapping("/dodajstudentagrupa")
     public String addStudentToGroup(@RequestParam int studentId, @RequestParam int groupId, HttpServletRequest request) {
         logger.info("Dodawanie studenta o id: {} do grupy o id: {} z adresu: {}", studentId, groupId, request.getRemoteAddr());
         if (studentRepository.findById(studentId).isEmpty()){
@@ -98,7 +106,7 @@ public class ApiController {
                 """;
     }
 
-    @PostMapping("/api/usunstudentagrupa")
+    @PostMapping("/usunstudentagrupa")
     public String removeStudentFromGroup(@RequestParam int studentId, HttpServletRequest request) {
         logger.info("Usuwanie studenta o id: {} z grupy z adresu: {}", studentId, request.getRemoteAddr());
         if (studentRepository.findById(studentId).isEmpty()) {
@@ -121,7 +129,7 @@ public class ApiController {
                 """;
     }
 
-    @PostMapping("/api/dodajtermin")
+    @PostMapping("/dodajtermin")
     public String addTerm(@RequestParam int grupaId, @RequestParam String nazwa, @RequestParam String data, @RequestParam int prowadzacyId, HttpServletRequest request) {
         logger.info("Dodawanie terminu: {} {} {} {} z adresu: {}", grupaId, nazwa, data, prowadzacyId, request.getRemoteAddr());
         Termin termin = new Termin();
@@ -138,7 +146,7 @@ public class ApiController {
                 """;
     }
 
-    @PostMapping("/api/usuntermin")
+    @PostMapping("/usuntermin")
     public String removeTerm(@RequestParam int terminId, HttpServletRequest request) {
         logger.info("Usuwanie terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
         terminRepository.deleteById(terminId);
@@ -150,18 +158,18 @@ public class ApiController {
                 """;
     }
 
-    @GetMapping("/api/sprawdzobecnosc")
+    @GetMapping("/sprawdzobecnosc")
     public String checkAttendance(HttpServletRequest request) {
         return ":D";
     }
 
-    @GetMapping("/api/grupy")
+    @GetMapping("/grupy")
     public List<Grupa> getGroups(HttpServletRequest request) {
         logger.info("Pobieranie grup z adresu: {}", request.getRemoteAddr());
         return grupaRepository.findAll();
     }
 
-    @PostMapping("/api/dodajgrupe")
+    @PostMapping("/dodajgrupe")
     public String addGroup(@RequestParam String nazwa   , HttpServletRequest request) {
         logger.info("Dodawanie grupy: {} z adresu: {}", nazwa, request.getRemoteAddr());
         Grupa grupa = new Grupa();
@@ -184,7 +192,7 @@ public class ApiController {
         }
     }
 
-    @PostMapping("/api/usungrupe")
+    @PostMapping("/usungrupe")
     public String removeGroup(@RequestParam int grupaId, HttpServletRequest request) {
         logger.info("Usuwanie grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
         grupaRepository.deleteById(grupaId);
@@ -197,7 +205,7 @@ public class ApiController {
                 """;
     }
 
-    @GetMapping("/api/dziennik")
+    @GetMapping("/dziennik")
     public String checkAttendanceList(HttpServletRequest request) {
         return """
                 {"id": 2137}
