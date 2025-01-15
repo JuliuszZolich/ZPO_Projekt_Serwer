@@ -8,6 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ObecnoscRepository extends JpaRepository<Obecnosc, Integer> {
-    List<Obecnosc> findBystudentId(int studentId);
+    List<Obecnosc> findByStudentId(int studentId);
+    Obecnosc findByStudentIdAndTerminId(int studentId, int terminId);
+    List<Obecnosc> findByTerminId(int terminId);
 }
 

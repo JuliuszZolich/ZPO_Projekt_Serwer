@@ -29,7 +29,7 @@ public class LoginController {
         return "index";
     }
     @PostMapping("/")
-    public String login(@RequestParam(name = "login") String login, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public String login(@RequestParam String login, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         if (login == null) {
             model.addAttribute("error", "Niepoprawny indeks");
             logger.warn("Niepoprawny indeks z adresu: {}", request.getRemoteAddr());

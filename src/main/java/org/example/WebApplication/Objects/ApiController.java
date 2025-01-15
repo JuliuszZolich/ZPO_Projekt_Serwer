@@ -1,7 +1,7 @@
 package org.example.WebApplication.Objects;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.Database.Objects.Grupa;
+import org.example.Database.Objects.*;
 import org.example.Database.Objects.Prowadzacy;
 import org.example.Database.Objects.Student;
 import org.example.Database.Objects.Termin;
@@ -158,9 +158,21 @@ public class ApiController {
                 """;
     }
 
+    @GetMapping("/termingrupa")
+    public List<Termin> getTermsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
+        logger.info("Pobieranie terminów z grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
+        return terminRepository.findByGrupaId(grupaId);
+    }
+
     @GetMapping("/sprawdzobecnosc")
-    public String checkAttendance(HttpServletRequest request) {
-        return ":D";
+    public List<Obecnosc> checkAttendance(@RequestParam int terminId, HttpServletRequest request) {
+        logger.info("Sprawdzanie obecności na terminie o id: {} z adresu: {}", terminId, request.getRemoteAddr());
+        return obecnoscRepository.findByTerminId(terminId);
+    }
+    @GetMapping("/sprawdzobecnoscstudenta")
+    public Obecnosc checkStudentAttendanceAtTerm(@RequestParam int studentId, @RequestParam int terminId, HttpServletRequest request) {
+        logger.info("Sprawdzanie obecności studenta o id: {} na terminie o id: {} z adresu: {}", studentId, terminId, request.getRemoteAddr());
+        return obecnoscRepository.findByStudentIdAndTerminId(studentId, terminId);
     }
 
     @GetMapping("/grupy")

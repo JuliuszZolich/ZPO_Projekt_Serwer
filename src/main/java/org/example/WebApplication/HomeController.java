@@ -31,7 +31,7 @@ public class HomeController {
     public String home(@ModelAttribute("index") String index, Model model) {
         List<ObecnoscWeb> obecnosci = new ArrayList<>();
         try {
-            List<Obecnosc> obecnosciDB = obecnoscRepository.findBystudentId(Integer.parseInt(index));
+            List<Obecnosc> obecnosciDB = obecnoscRepository.findByStudentId(Integer.parseInt(index));
 
             for (Obecnosc obecnosc : obecnosciDB) {
                 if (terminRepository.findById(obecnosc.getTerminId()).isEmpty()){
