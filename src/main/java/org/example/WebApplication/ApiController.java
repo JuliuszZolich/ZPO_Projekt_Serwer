@@ -1,4 +1,4 @@
-package org.example.WebApplication.Objects;
+package org.example.WebApplication;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.Database.Objects.*;
@@ -75,6 +75,7 @@ public class ApiController {
     public String removeStudent(@RequestParam int id, HttpServletRequest request) {
         logger.info("Usuwanie studenta o id: {} z adresu: {}", id, request.getRemoteAddr());
         studentRepository.deleteById(id);
+        obecnoscRepository.deleteAllByStudentId(id);
         return """
                 {
                 "error": "",
@@ -98,6 +99,13 @@ public class ApiController {
         Student student = studentRepository.findById(studentId).get();
         student.setGrupaId(groupId);
         studentRepository.save(student);
+        for(Termin t: terminRepository.findByGrupaId(groupId)){
+            Obecnosc obecnosc = new Obecnosc();
+            obecnosc.setStudentId(studentId);
+            obecnosc.setTerminId(t.getId());
+            obecnosc.setAttendance(0);
+            obecnoscRepository.save(obecnosc);
+        }
         return """
                 {
                 "error": "",
@@ -121,6 +129,7 @@ public class ApiController {
         Student student = studentRepository.findById(studentId).get();
         student.setGrupaId(null);
         studentRepository.save(student);
+        obecnoscRepository.deleteAllByStudentId(studentId);
         return """
                 {
                 "error": "",
@@ -138,6 +147,13 @@ public class ApiController {
         termin.setData(data);
         termin.setProwadzacyId(prowadzacyId);
         terminRepository.save(termin);
+        for(Student s: studentRepository.findByGrupaId(grupaId)){
+            Obecnosc obecnosc = new Obecnosc();
+            obecnosc.setStudentId(s.getIndeks());
+            obecnosc.setTerminId(termin.getId());
+            obecnosc.setAttendance(0);
+            obecnoscRepository.save(obecnosc);
+        }
         return """
                 {
                 "error": "",
@@ -150,6 +166,7 @@ public class ApiController {
     public String removeTerm(@RequestParam int terminId, HttpServletRequest request) {
         logger.info("Usuwanie terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
         terminRepository.deleteById(terminId);
+        obecnoscRepository.deleteAllByTerminId(terminId);
         return """
                 {
                 "error": "",
@@ -212,6 +229,11 @@ public class ApiController {
         for (Student student : students) {
             student.setGrupaId(null);
             studentRepository.save(student);
+        }
+        List<Termin> terms = terminRepository.findByGrupaId(grupaId);
+        for (Termin term : terms) {
+            obecnoscRepository.deleteAllByTerminId(term.getId());
+            terminRepository.deleteById(term.getId());
         }
         return """
                 {
