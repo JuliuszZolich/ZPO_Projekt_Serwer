@@ -6,6 +6,7 @@ import org.example.Database.Objects.Prowadzacy;
 import org.example.Database.Objects.Student;
 import org.example.Database.Objects.Termin;
 import org.example.Database.Repositories.*;
+import org.example.WebApplication.Objects.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,10 @@ public class ApiController {
 
     @GetMapping("/studencigrupa")
     public List<Student> getStudentsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
+        if(grupaRepository.findById(grupaId).isEmpty()){
+            logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
+            return null;
+        }
         logger.info("Pobieranie studentów z grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
         return studentRepository.findByGrupaId(grupaId);
     }
@@ -44,6 +49,10 @@ public class ApiController {
 
     @PostMapping("/dodajstudenta")
     public String addStudent(@RequestParam int indeks, @RequestParam String imie, @RequestParam String nazwisko, HttpServletRequest request) {
+        if(studentRepository.existsStudentByIndeks(indeks)){
+            logger.error("Student o indeksie: {} już istnieje z adresu: {}", indeks, request.getRemoteAddr());
+            return new Error("Student o podanym indeksie już istnieje", 403).toString();
+        }
         logger.info("Dodawanie studenta: {} {} {} z adresu : {}", indeks, imie, nazwisko, request.getRemoteAddr());
         Student student = new Student();
         student.setIndeks(indeks);
@@ -51,12 +60,7 @@ public class ApiController {
         student.setNazwisko(nazwisko);
         student.setGrupaId(null);
         studentRepository.save(student);
-        return """
-                {
-                "error": "",
-                "error_code: 200
-                }
-                """;
+        return new Error("", 200).toString();
     }
 
     @PostMapping("/login")
@@ -73,15 +77,14 @@ public class ApiController {
 
     @PostMapping("/usunstudenta")
     public String removeStudent(@RequestParam int id, HttpServletRequest request) {
+        if (studentRepository.findById(id).isEmpty()){
+            logger.error("Nie ma takiego studenta o id: {} z adresu: {}", id, request.getRemoteAddr());
+            return new Error("Nie ma takiego studenta", 404).toString();
+        }
         logger.info("Usuwanie studenta o id: {} z adresu: {}", id, request.getRemoteAddr());
         studentRepository.deleteById(id);
         obecnoscRepository.deleteAllByStudentId(id);
-        return """
-                {
-                "error": "",
-                "error_code: 200
-                }
-                """;
+        return new Error("", 200).toString();
     }
 
     @PostMapping("/dodajstudentagrupa")
@@ -89,12 +92,11 @@ public class ApiController {
         logger.info("Dodawanie studenta o id: {} do grupy o id: {} z adresu: {}", studentId, groupId, request.getRemoteAddr());
         if (studentRepository.findById(studentId).isEmpty()){
             logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
-            return """
-                    {
-                    "error": "Nie ma takiego studenta",
-                    "error_code: 404
-                    }
-                    """;
+            return new Error("Nie ma takiego studenta", 404).toString();
+        }
+        if (studentRepository.findById(studentId).get().getGrupaId() != null){
+            logger.error("Student o id: {} jest już w grupie o id: {} z adresu: {}", studentId, studentRepository.findById(studentId).get().getGrupaId(), request.getRemoteAddr());
+            return new Error("Student jest już w grupie", 403).toString();
         }
         Student student = studentRepository.findById(studentId).get();
         student.setGrupaId(groupId);
@@ -106,12 +108,7 @@ public class ApiController {
             obecnosc.setAttendance(0);
             obecnoscRepository.save(obecnosc);
         }
-        return """
-                {
-                "error": "",
-                "error_code: 200
-                }
-                """;
+        return new Error("", 200).toString();
     }
 
     @PostMapping("/usunstudentagrupa")
@@ -119,23 +116,13 @@ public class ApiController {
         logger.info("Usuwanie studenta o id: {} z grupy z adresu: {}", studentId, request.getRemoteAddr());
         if (studentRepository.findById(studentId).isEmpty()) {
             logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
-            return """
-                    {
-                    "error": "Nie ma takiego studenta",
-                    "error_code": 404
-                    }
-                    """;
+            return new Error("Nie ma takiego studenta", 404).toString();
         }
         Student student = studentRepository.findById(studentId).get();
         student.setGrupaId(null);
         studentRepository.save(student);
         obecnoscRepository.deleteAllByStudentId(studentId);
-        return """
-                {
-                "error": "",
-                "error_code": 200
-                }
-                """;
+        return new Error("", 200).toString();
     }
 
     @PostMapping("/dodajtermin")
@@ -154,38 +141,41 @@ public class ApiController {
             obecnosc.setAttendance(0);
             obecnoscRepository.save(obecnosc);
         }
-        return """
-                {
-                "error": "",
-                "error_code: 200
-                }
-                """;
+        return new Error("", 200).toString();
     }
 
     @PostMapping("/usuntermin")
     public String removeTerm(@RequestParam int terminId, HttpServletRequest request) {
+        if(terminRepository.findById(terminId).isEmpty()){
+            logger.error("Nie ma takiego terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
+            return new Error("Nie ma takiego terminu", 404).toString();
+        }
         logger.info("Usuwanie terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
         terminRepository.deleteById(terminId);
         obecnoscRepository.deleteAllByTerminId(terminId);
-        return """
-                {
-                "error": "",
-                "error_code: 200
-                }
-                """;
+        return new Error("", 200).toString();
     }
 
     @GetMapping("/termingrupa")
     public List<Termin> getTermsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
+        if(grupaRepository.findById(grupaId).isEmpty()){
+            logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
+            return null;
+        }
         logger.info("Pobieranie terminów z grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
         return terminRepository.findByGrupaId(grupaId);
     }
 
     @GetMapping("/sprawdzobecnosc")
     public List<Obecnosc> checkAttendance(@RequestParam int terminId, HttpServletRequest request) {
+        if(terminRepository.findById(terminId).isEmpty()){
+            logger.error("Nie ma takiego terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
+            return null;
+        }
         logger.info("Sprawdzanie obecności na terminie o id: {} z adresu: {}", terminId, request.getRemoteAddr());
         return obecnoscRepository.findByTerminId(terminId);
     }
+
     @GetMapping("/sprawdzobecnoscstudenta")
     public Obecnosc checkStudentAttendanceAtTerm(@RequestParam int studentId, @RequestParam int terminId, HttpServletRequest request) {
         logger.info("Sprawdzanie obecności studenta o id: {} na terminie o id: {} z adresu: {}", studentId, terminId, request.getRemoteAddr());
@@ -205,19 +195,9 @@ public class ApiController {
         grupa.setNazwa(nazwa);
         try{
             grupaRepository.save(grupa);
-            return """
-                {
-                "error": "",
-                "error_code: 200
-                }
-                """;
+            return new Error("", 200).toString();
         } catch (Exception e) {
-            return """
-                {
-                "error": "Nie udało się dodać grupy",
-                "error_code: 403
-                }
-                """;
+            return new Error("Nie udało się dodać grupy", 403).toString();
         }
     }
 
@@ -235,13 +215,7 @@ public class ApiController {
             obecnoscRepository.deleteAllByTerminId(term.getId());
             terminRepository.deleteById(term.getId());
         }
-        return """
-                {
-                "error": "",
-                "error_value": 200,
-                "error_code: 0
-                }
-                """;
+        return new Error("", 200).toString();
     }
 
     @GetMapping("/dziennik")

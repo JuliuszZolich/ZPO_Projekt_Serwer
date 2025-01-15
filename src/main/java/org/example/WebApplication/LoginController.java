@@ -28,6 +28,7 @@ public class LoginController {
         model.addAttribute("error", "");
         return "index";
     }
+
     @PostMapping("/")
     public String login(@RequestParam String login, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         if (login == null) {
