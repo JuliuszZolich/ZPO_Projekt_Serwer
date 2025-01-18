@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ApiController {
 
     Logger logger = LoggerFactory.getLogger(ApiController.class);
+
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -82,6 +84,7 @@ public class ApiController {
 
     }
 
+    @Transactional
     @PostMapping("/usunstudenta")
     public ResponseEntity<?> removeStudent(@RequestParam int id, HttpServletRequest request) {
         if (studentRepository.findById(id).isEmpty()){
@@ -118,6 +121,7 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
     }
 
+    @Transactional
     @PostMapping("/usunstudentagrupa")
     public ResponseEntity<?> removeStudentFromGroup(@RequestParam int studentId, HttpServletRequest request) {
         logger.info("Usuwanie studenta o id: {} z grupy z adresu: {}", studentId, request.getRemoteAddr());
@@ -134,7 +138,7 @@ public class ApiController {
 
     @PostMapping("/dodajtermin")
     public ResponseEntity<?> addTerm(@RequestParam int grupaId, @RequestParam String nazwa, @RequestParam String data, @RequestParam int prowadzacyId, HttpServletRequest request) {
-        logger.info("Dodawanie terminu: {} {} {} {} z adresu: {}", grupaId, nazwa, data, prowadzacyId, request.getRemoteAddr());
+        logger.info("Dodawanie terminu do grupy o id: {} z prowadzącym {} z adresu: {}", grupaId, prowadzacyId, request.getRemoteAddr());
         Termin termin = new Termin();
         termin.setGrupaId(grupaId);
         if(grupaRepository.findById(grupaId).isEmpty()){
@@ -159,6 +163,7 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
     }
 
+    @Transactional
     @PostMapping("/usuntermin")
     public ResponseEntity<?> removeTerm(@RequestParam int terminId, HttpServletRequest request) {
         if(terminRepository.findById(terminId).isEmpty()){
@@ -229,6 +234,7 @@ public class ApiController {
         }
     }
 
+    @Transactional
     @PostMapping("/usungrupe")
     public ResponseEntity<?> removeGroup(@RequestParam int grupaId, HttpServletRequest request) {
         logger.info("Usuwanie grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
