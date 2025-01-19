@@ -9,5 +9,9 @@ import java.util.List;
 @Repository
 public interface TerminRepository extends JpaRepository<Termin, Integer> {
     List<Termin> findByGrupaId(int grupaId);
+
+    Termin findByGrupaIdAndData(int grupaId, String data);
+
+    boolean existsByDataAndGrupaId(String data, int grupaId);
 }
 

@@ -42,7 +42,7 @@ public class ApiController {
 
     @GetMapping("/studencigrupa")
     public ResponseEntity<?> getStudentsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
-        if(grupaRepository.findById(grupaId).isEmpty()){
+        if (!grupaRepository.existsById(grupaId)) {
             logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej grupy"));
         }
@@ -53,7 +53,7 @@ public class ApiController {
 
     @PostMapping("/dodajstudenta")
     public ResponseEntity<?> addStudent(@RequestParam int indeks, @RequestParam String imie, @RequestParam String nazwisko, HttpServletRequest request) {
-        if(studentRepository.existsStudentByIndeks(indeks)){
+        if (studentRepository.existsStudentByIndeks(indeks)) {
             logger.error("Student o indeksie: {} już istnieje z adresu: {}", indeks, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new Error("Student o podanym indeksie już istnieje"));
         }
@@ -68,11 +68,11 @@ public class ApiController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam int login, @RequestParam  String password, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestParam int login, @RequestParam String password, HttpServletRequest request) {
         logger.info("Logowanie prowadzacego: {} z adresu: {}", login, request.getRemoteAddr());
-        try{
+        try {
             Prowadzacy prowadzacy = prowadzacyRepository.findByIdAndHaslo(login, password);
-            if(prowadzacy == null){
+            if (prowadzacy == null) {
                 logger.error("Błąd logowania prowadzacego: {} z adresu: {}", login, request.getRemoteAddr());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Error("Błąd logowania"));
             }
@@ -87,7 +87,7 @@ public class ApiController {
     @Transactional
     @PostMapping("/usunstudenta")
     public ResponseEntity<?> removeStudent(@RequestParam int id, HttpServletRequest request) {
-        if (studentRepository.findById(id).isEmpty()){
+        if (!studentRepository.existsById(id)) {
             logger.error("Nie ma takiego studenta o id: {} z adresu: {}", id, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego studenta"));
         }
@@ -100,18 +100,18 @@ public class ApiController {
     @PostMapping("/dodajstudentagrupa")
     public ResponseEntity<?> addStudentToGroup(@RequestParam int studentId, @RequestParam int groupId, HttpServletRequest request) {
         logger.info("Dodawanie studenta o id: {} do grupy o id: {} z adresu: {}", studentId, groupId, request.getRemoteAddr());
-        if (studentRepository.findById(studentId).isEmpty()){
+        if (!studentRepository.existsById(studentId)) {
             logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego studenta"));
         }
-        if (studentRepository.findById(studentId).get().getGrupaId() != null){
+        if (studentRepository.findById(studentId).get().getGrupaId() != null) {
             logger.error("Student o id: {} jest już w grupie o id: {} z adresu: {}", studentId, studentRepository.findById(studentId).get().getGrupaId(), request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new Error("Student jest już w grupie"));
         }
         Student student = studentRepository.findById(studentId).get();
         student.setGrupaId(groupId);
         studentRepository.save(student);
-        for(Termin t: terminRepository.findByGrupaId(groupId)){
+        for (Termin t : terminRepository.findByGrupaId(groupId)) {
             Obecnosc obecnosc = new Obecnosc();
             obecnosc.setStudentId(studentId);
             obecnosc.setTerminId(t.getId());
@@ -125,7 +125,7 @@ public class ApiController {
     @PostMapping("/usunstudentagrupa")
     public ResponseEntity<?> removeStudentFromGroup(@RequestParam int studentId, HttpServletRequest request) {
         logger.info("Usuwanie studenta o id: {} z grupy z adresu: {}", studentId, request.getRemoteAddr());
-        if (studentRepository.findById(studentId).isEmpty()) {
+        if (!studentRepository.existsById(studentId)) {
             logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego studenta"));
         }
@@ -139,21 +139,25 @@ public class ApiController {
     @PostMapping("/dodajtermin")
     public ResponseEntity<?> addTerm(@RequestParam int grupaId, @RequestParam String nazwa, @RequestParam String data, @RequestParam int prowadzacyId, HttpServletRequest request) {
         logger.info("Dodawanie terminu do grupy o id: {} z prowadzącym {} z adresu: {}", grupaId, prowadzacyId, request.getRemoteAddr());
-        Termin termin = new Termin();
-        termin.setGrupaId(grupaId);
-        if(grupaRepository.findById(grupaId).isEmpty()){
+        if (!grupaRepository.existsById(grupaId)) {
             logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej grupy"));
         }
-        termin.setNazwa(nazwa);
-        termin.setData(data);
-        termin.setProwadzacyId(prowadzacyId);
-        if(prowadzacyRepository.findById(prowadzacyId).isEmpty()){
+        if (!terminRepository.existsByDataAndGrupaId(data, grupaId)) {
+            logger.error("Termin o nazwie: {} już istnieje w grupie o id: {} z adresu: {}", nazwa, grupaId, request.getRemoteAddr());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new Error("Termin o podanej dacie już istnieje"));
+        }
+        if (!prowadzacyRepository.existsById(prowadzacyId)) {
             logger.error("Nie ma takiego prowadzacego o id: {} z adresu: {}", prowadzacyId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego prowadzacego"));
         }
+        Termin termin = new Termin();
+        termin.setNazwa(nazwa);
+        termin.setGrupaId(grupaId);
+        termin.setData(data);
+        termin.setProwadzacyId(prowadzacyId);
         terminRepository.save(termin);
-        for(Student s: studentRepository.findByGrupaId(grupaId)){
+        for (Student s : studentRepository.findByGrupaId(grupaId)) {
             Obecnosc obecnosc = new Obecnosc();
             obecnosc.setStudentId(s.getIndeks());
             obecnosc.setTerminId(termin.getId());
@@ -166,7 +170,7 @@ public class ApiController {
     @Transactional
     @PostMapping("/usuntermin")
     public ResponseEntity<?> removeTerm(@RequestParam int terminId, HttpServletRequest request) {
-        if(terminRepository.findById(terminId).isEmpty()){
+        if (!terminRepository.existsById(terminId)) {
             logger.error("Nie ma takiego terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego terminu"));
         }
@@ -178,7 +182,7 @@ public class ApiController {
 
     @GetMapping("/termingrupa")
     public ResponseEntity<?> getTermsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
-        if(grupaRepository.findById(grupaId).isEmpty()){
+        if (!grupaRepository.existsById(grupaId)) {
             logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej grupy"));
         }
@@ -188,7 +192,7 @@ public class ApiController {
 
     @GetMapping("/sprawdzobecnosc")
     public ResponseEntity<?> checkAttendance(@RequestParam int terminId, HttpServletRequest request) {
-        if(terminRepository.findById(terminId).isEmpty()){
+        if (!terminRepository.existsById(terminId)) {
             logger.error("Nie ma takiego terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego terminu"));
         }
@@ -199,19 +203,40 @@ public class ApiController {
     @GetMapping("/sprawdzobecnoscstudenta")
     public ResponseEntity<?> checkStudentAttendanceAtTerm(@RequestParam int studentId, @RequestParam int terminId, HttpServletRequest request) {
         logger.info("Sprawdzanie obecności studenta o id: {} na terminie o id: {} z adresu: {}", studentId, terminId, request.getRemoteAddr());
-        if(studentRepository.findById(studentId).isEmpty()){
+        if (!studentRepository.existsById(studentId)) {
             logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego studenta"));
         }
-        if(terminRepository.findById(terminId).isEmpty()){
+        if (!terminRepository.existsById(terminId)) {
             logger.error("Nie ma takiego terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego terminu"));
         }
-        if(obecnoscRepository.findByStudentIdAndTerminId(studentId, terminId) == null){
+        if (obecnoscRepository.findByStudentIdAndTerminId(studentId, terminId) == null) {
             logger.error("Nie ma takiej obecności studenta o id: {} na terminie o id: {} z adresu: {}", studentId, terminId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej obecności"));
         }
         return ResponseEntity.status(HttpStatus.OK).body(obecnoscRepository.findByStudentIdAndTerminId(studentId, terminId));
+    }
+
+    @PostMapping("/zmienobecnosc")
+    public ResponseEntity<?> changeAttendance(@RequestParam int studentId, @RequestParam int terminId, @RequestParam int attendance, HttpServletRequest request) {
+        logger.info("Zmiana obecności studenta o id: {} na terminie o id: {} na: {} z adresu: {}", studentId, terminId, attendance, request.getRemoteAddr());
+        if (!studentRepository.existsById(studentId)) {
+            logger.error("Nie ma takiego studenta o id: {} z adresu: {}", studentId, request.getRemoteAddr());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego studenta"));
+        }
+        if (!terminRepository.existsById(terminId)) {
+            logger.error("Nie ma takiego terminu o id: {} z adresu: {}", terminId, request.getRemoteAddr());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiego terminu"));
+        }
+        if (obecnoscRepository.findByStudentIdAndTerminId(studentId, terminId) == null) {
+            logger.error("Nie ma takiej obecności studenta o id: {} na terminie o id: {} z adresu: {}", studentId, terminId, request.getRemoteAddr());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej obecności"));
+        }
+        Obecnosc obecnosc = obecnoscRepository.findByStudentIdAndTerminId(studentId, terminId);
+        obecnosc.setAttendance(attendance);
+        obecnoscRepository.save(obecnosc);
+        return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
     }
 
     @GetMapping("/grupy")
@@ -225,7 +250,7 @@ public class ApiController {
         logger.info("Dodawanie grupy: {} z adresu: {}", nazwa, request.getRemoteAddr());
         Grupa grupa = new Grupa();
         grupa.setNazwa(nazwa);
-        try{
+        try {
             grupaRepository.save(grupa);
             return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
         } catch (Exception e) {
@@ -238,7 +263,7 @@ public class ApiController {
     @PostMapping("/usungrupe")
     public ResponseEntity<?> removeGroup(@RequestParam int grupaId, HttpServletRequest request) {
         logger.info("Usuwanie grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
-        if(grupaRepository.findById(grupaId).isEmpty()){
+        if (!grupaRepository.existsById(grupaId)) {
             logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej grupy"));
         }
@@ -254,10 +279,5 @@ public class ApiController {
             terminRepository.deleteById(term.getId());
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Error(""));
-    }
-
-    @GetMapping("/dziennik")
-    public ResponseEntity<?> checkAttendanceList(HttpServletRequest request) {
-        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(new Error("Nie zaimplementowano"));
     }
 }
