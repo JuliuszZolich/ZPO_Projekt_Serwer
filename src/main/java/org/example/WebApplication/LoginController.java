@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Kontroler obsługujący żądania związane z logowaniem w aplikacji internetowej.
+ */
 
 @Controller
 public class LoginController {
@@ -21,6 +24,13 @@ public class LoginController {
     @Autowired
     private StudentRepository studentRepository;
 
+    /**
+     * Obsługuje żądanie GET dla strony logowania.
+     *
+     * @param model   Obiekt Model do przekazywania danych do widoku.
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return Nazwa widoku "index".
+     */
     @GetMapping("/")
     public String login(Model model, HttpServletRequest request) {
         logger.info("Logowanie z adresu: {}", request.getRemoteAddr());
@@ -29,6 +39,15 @@ public class LoginController {
         return "index";
     }
 
+    /**
+     * Obsługuje żądanie POST dla strony logowania.
+     *
+     * @param login               Indeks studenta.
+     * @param model               Obiekt Model do przekazywania danych do widoku.
+     * @param redirectAttributes  Atrybuty przekierowania do innego widoku.
+     * @param request             Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return Nazwa widoku "index" lub przekierowanie do "/home".
+     */
     @PostMapping("/")
     public String login(@RequestParam String login, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         if (login == null) {

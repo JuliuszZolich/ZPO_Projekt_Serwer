@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Kontroler obsługujący żądania związane z główną stroną aplikacji internetowej.
+ */
+
 @Controller
 public class HomeController {
 
@@ -27,8 +31,16 @@ public class HomeController {
     @Autowired
     private TerminRepository terminRepository;
 
+    /**
+     * Obsługuje żądanie GET dla strony głównej.
+     *
+     * @param index  Indeks studenta jako atrybut modelu.
+     * @param model  Obiekt Model do przekazywania danych do widoku.
+     * @return Nazwa widoku "home".
+     */
     @GetMapping("/home")
     public String home(@ModelAttribute("index") String index, Model model) {
+        logger.info("Wyświetlanie strony głównej dla studenta o indeksie: {}", index);
         List<ObecnoscWeb> obecnosci = new ArrayList<>();
         try {
             List<Obecnosc> obecnosciDB = obecnoscRepository.findByStudentId(Integer.parseInt(index));
@@ -51,6 +63,4 @@ public class HomeController {
         model.addAttribute("lista", new ArrayList<String>());
         return "home";
     }
-
-
 }

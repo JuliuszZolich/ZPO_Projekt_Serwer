@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Kontroler API obsługujący różne operacje związane z zarządzaniem studentami, grupami, terminami i obecnościami.
+ */
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -34,12 +37,25 @@ public class ApiController {
     @Autowired
     private GrupaRepository grupaRepository;
 
+    /**
+     * Pobiera listę wszystkich studentów.
+     *
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z listą studentów.
+     */
     @GetMapping("/studenci")
     public ResponseEntity<?> getStudents(HttpServletRequest request) {
         logger.info("Pobieranie studentów z adresu: {}", request.getRemoteAddr());
         return ResponseEntity.status(HttpStatus.OK).body(studentRepository.findAll());
     }
 
+    /**
+     * Pobiera listę studentów z określonej grupy.
+     *
+     * @param grupaId Identyfikator grupy.
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z listą studentów z grupy lub błędem, jeśli grupa nie istnieje.
+     */
     @GetMapping("/studencigrupa")
     public ResponseEntity<?> getStudentsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
         if (!grupaRepository.existsById(grupaId)) {
@@ -50,7 +66,15 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(studentRepository.findByGrupaId(grupaId));
     }
 
-
+    /**
+     * Dodaje nowego studenta.
+     *
+     * @param indeks   Indeks studenta.
+     * @param imie     Imię studenta.
+     * @param nazwisko Nazwisko studenta.
+     * @param request  Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli student już istnieje.
+     */
     @PostMapping("/dodajstudenta")
     public ResponseEntity<?> addStudent(@RequestParam int indeks, @RequestParam String imie, @RequestParam String nazwisko, HttpServletRequest request) {
         if (studentRepository.existsStudentByIndeks(indeks)) {
@@ -67,6 +91,14 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
     }
 
+    /**
+     * Loguje prowadzącego.
+     *
+     * @param login    Login prowadzącego.
+     * @param password Hasło prowadzącego.
+     * @param request  Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli logowanie się nie powiodło.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam int login, @RequestParam String password, HttpServletRequest request) {
         logger.info("Logowanie prowadzacego: {} z adresu: {}", login, request.getRemoteAddr());
@@ -81,9 +113,15 @@ public class ApiController {
             logger.error("Błąd logowania prowadzacego: {} z adresu: {}", login, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Error("Błąd logowania"));
         }
-
     }
 
+    /**
+     * Usuwa studenta.
+     *
+     * @param id      Identyfikator studenta.
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli student nie istnieje.
+     */
     @Transactional
     @PostMapping("/usunstudenta")
     public ResponseEntity<?> removeStudent(@RequestParam int id, HttpServletRequest request) {
@@ -97,6 +135,14 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Error(""));
     }
 
+    /**
+     * Dodaje studenta do grupy.
+     *
+     * @param studentId Identyfikator studenta.
+     * @param groupId   Identyfikator grupy.
+     * @param request   Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli student lub grupa nie istnieje.
+     */
     @PostMapping("/dodajstudentagrupa")
     public ResponseEntity<?> addStudentToGroup(@RequestParam int studentId, @RequestParam int groupId, HttpServletRequest request) {
         logger.info("Dodawanie studenta o id: {} do grupy o id: {} z adresu: {}", studentId, groupId, request.getRemoteAddr());
@@ -121,6 +167,13 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
     }
 
+    /**
+     * Usuwa studenta z grupy.
+     *
+     * @param studentId Identyfikator studenta.
+     * @param request   Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli student nie istnieje.
+     */
     @Transactional
     @PostMapping("/usunstudentagrupa")
     public ResponseEntity<?> removeStudentFromGroup(@RequestParam int studentId, HttpServletRequest request) {
@@ -136,6 +189,16 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Error(""));
     }
 
+    /**
+     * Dodaje nowy termin do grupy.
+     *
+     * @param grupaId      Identyfikator grupy.
+     * @param nazwa        Nazwa terminu.
+     * @param data         Data terminu.
+     * @param prowadzacyId Identyfikator prowadzącego.
+     * @param request      Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli grupa lub prowadzący nie istnieje.
+     */
     @PostMapping("/dodajtermin")
     public ResponseEntity<?> addTerm(@RequestParam int grupaId, @RequestParam String nazwa, @RequestParam String data, @RequestParam int prowadzacyId, HttpServletRequest request) {
         logger.info("Dodawanie terminu do grupy o id: {} z prowadzącym {} z adresu: {}", grupaId, prowadzacyId, request.getRemoteAddr());
@@ -167,6 +230,13 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
     }
 
+    /**
+     * Usuwa termin.
+     *
+     * @param terminId Identyfikator terminu.
+     * @param request  Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli termin nie istnieje.
+     */
     @Transactional
     @PostMapping("/usuntermin")
     public ResponseEntity<?> removeTerm(@RequestParam int terminId, HttpServletRequest request) {
@@ -180,6 +250,13 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Error(""));
     }
 
+    /**
+     * Pobiera listę terminów z określonej grupy.
+     *
+     * @param grupaId Identyfikator grupy.
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z listą terminów z grupy lub błędem, jeśli grupa nie istnieje.
+     */
     @GetMapping("/termingrupa")
     public ResponseEntity<?> getTermsFromGroup(@RequestParam int grupaId, HttpServletRequest request) {
         if (!grupaRepository.existsById(grupaId)) {
@@ -190,6 +267,13 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(terminRepository.findByGrupaId(grupaId));
     }
 
+    /**
+     * Sprawdza obecność na określonym terminie.
+     *
+     * @param terminId Identyfikator terminu.
+     * @param request  Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z listą obecności na terminie lub błędem, jeśli termin nie istnieje.
+     */
     @GetMapping("/sprawdzobecnosc")
     public ResponseEntity<?> checkAttendance(@RequestParam int terminId, HttpServletRequest request) {
         if (!terminRepository.existsById(terminId)) {
@@ -200,6 +284,14 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(obecnoscRepository.findByTerminId(terminId));
     }
 
+    /**
+     * Sprawdza obecność studenta na określonym terminie.
+     *
+     * @param studentId Identyfikator studenta.
+     * @param terminId  Identyfikator terminu.
+     * @param request   Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o obecności studenta na terminie lub błędem, jeśli student lub termin nie istnieje.
+     */
     @GetMapping("/sprawdzobecnoscstudenta")
     public ResponseEntity<?> checkStudentAttendanceAtTerm(@RequestParam int studentId, @RequestParam int terminId, HttpServletRequest request) {
         logger.info("Sprawdzanie obecności studenta o id: {} na terminie o id: {} z adresu: {}", studentId, terminId, request.getRemoteAddr());
@@ -218,6 +310,15 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(obecnoscRepository.findByStudentIdAndTerminId(studentId, terminId));
     }
 
+    /**
+     * Zmienia obecność studenta na określonym terminie.
+     *
+     * @param studentId  Identyfikator studenta.
+     * @param terminId   Identyfikator terminu.
+     * @param attendance Nowa wartość obecności.
+     * @param request    Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli student, termin lub obecność nie istnieje.
+     */
     @PostMapping("/zmienobecnosc")
     public ResponseEntity<?> changeAttendance(@RequestParam int studentId, @RequestParam int terminId, @RequestParam int attendance, HttpServletRequest request) {
         logger.info("Zmiana obecności studenta o id: {} na terminie o id: {} na: {} z adresu: {}", studentId, terminId, attendance, request.getRemoteAddr());
@@ -239,12 +340,25 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
     }
 
+    /**
+     * Pobiera listę wszystkich grup.
+     *
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z listą grup.
+     */
     @GetMapping("/grupy")
     public ResponseEntity<?> getGroups(HttpServletRequest request) {
         logger.info("Pobieranie grup z adresu: {}", request.getRemoteAddr());
         return ResponseEntity.status(HttpStatus.OK).body(grupaRepository.findAll());
     }
 
+    /**
+     * Dodaje nową grupę.
+     *
+     * @param nazwa   Nazwa grupy.
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli dodanie grupy się nie powiodło.
+     */
     @PostMapping("/dodajgrupe")
     public ResponseEntity<?> addGroup(@RequestParam String nazwa, HttpServletRequest request) {
         logger.info("Dodawanie grupy: {} z adresu: {}", nazwa, request.getRemoteAddr());
@@ -252,20 +366,27 @@ public class ApiController {
         grupa.setNazwa(nazwa);
         try {
             grupaRepository.save(grupa);
-            return ResponseEntity.status(HttpStatus.OK).body(new Error(""));
+            return ResponseEntity.status(HttpStatus.OK).body(new java.lang.Error(""));
         } catch (Exception e) {
             logger.error("Błąd dodawania grupy: {} z adresu: {}", nazwa, request.getRemoteAddr());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Error("Błąd dodawania grupy"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new java.lang.Error("Błąd dodawania grupy"));
         }
     }
 
+    /**
+     * Usuwa grupę.
+     *
+     * @param grupaId Identyfikator grupy.
+     * @param request Obiekt HttpServletRequest zawierający informacje o żądaniu HTTP.
+     * @return ResponseEntity z informacją o sukcesie lub błędem, jeśli grupa nie istnieje.
+     */
     @Transactional
     @PostMapping("/usungrupe")
     public ResponseEntity<?> removeGroup(@RequestParam int grupaId, HttpServletRequest request) {
         logger.info("Usuwanie grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
         if (!grupaRepository.existsById(grupaId)) {
             logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej grupy"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new java.lang.Error("Nie ma takiej grupy"));
         }
         grupaRepository.deleteById(grupaId);
         List<Student> students = studentRepository.findByGrupaId(grupaId);
@@ -278,6 +399,6 @@ public class ApiController {
             obecnoscRepository.deleteAllByTerminId(term.getId());
             terminRepository.deleteById(term.getId());
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Error(""));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new java.lang.Error(""));
     }
 }

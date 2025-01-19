@@ -8,18 +8,40 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * Klasa reprezentująca studenta w bazie danych.
+ */
 @Entity
 @Getter @Setter
 public class Student implements Serializable {
-        @Id
-        private int indeks;
-        @Column(nullable = false)
-        private String imie;
-        @Column(nullable = false)
-        private String nazwisko;
-        @Column()
-        private Integer grupaId;
 
-        public Student() {
-        }
+    /**
+     * Indeks studenta.
+     */
+    @Id
+    private int indeks;
+
+    /**
+     * Imię studenta.
+     */
+    @Column(nullable = false)
+    private String imie;
+
+    /**
+     * Nazwisko studenta.
+     */
+    @Column(nullable = false)
+    private String nazwisko;
+
+    /**
+     * Identyfikator grupy, do której należy student.
+     */
+    @Column()
+    private Integer grupaId;
+
+    /**
+     * Konstruktor domyślny.
+     */
+    public Student() {
+    }
 }
