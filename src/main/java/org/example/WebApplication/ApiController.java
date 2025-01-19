@@ -206,7 +206,7 @@ public class ApiController {
             logger.error("Nie ma takiej grupy o id: {} z adresu: {}", grupaId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Nie ma takiej grupy"));
         }
-        if (!terminRepository.existsByDataAndGrupaId(data, grupaId)) {
+        if (terminRepository.existsByDataAndGrupaId(data, grupaId)) {
             logger.error("Termin o nazwie: {} już istnieje w grupie o id: {} z adresu: {}", nazwa, grupaId, request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new Error("Termin o podanej dacie już istnieje"));
         }
